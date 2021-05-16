@@ -6,6 +6,7 @@ namespace TASI.Backend.Infrastructure.Resources
     {
         Unauthorized,
         Forbidden,
+        NotFound,
         ModelValidation,
         UnhandledException,
         NameIdentifierIsEmpty
@@ -15,10 +16,11 @@ namespace TASI.Backend.Infrastructure.Resources
     {
         public const string Unauthorized = "You are unauthorized to access this resource";
         public const string Forbidden = "You don't have sufficent permission to access this resource";
+        public const string NotFound = "The specified resource cannot be found";
         public const string ModelValidation = "Request body/params/query contains invalid value";
         public const string UnhandledException = "An error has occurred when executing you request";
         public const string NameIdentifierNull = "Unable to get name identifier claim from Authorization header";
 
-        public static ErrorModel InternalExceptionModel = new(UnhandledException, ErrorCodes.ModelValidation);
+        public static ErrorModel InternalExceptionModel = new(UnhandledException, ErrorCodes.UnhandledException);
     }
 }

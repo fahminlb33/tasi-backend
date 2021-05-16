@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using TASI.Backend.Domain.Users.Dto;
 using TASI.Backend.Infrastructure.Database;
+using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Domain.Users.Handlers
 {
@@ -53,7 +54,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
-                return new UnauthorizedObjectResult(new { message = "User not found" });
+                return new UnauthorizedObjectResult(new ErrorModel(ErrorMessages.Unauthorized, ErrorCodes.Unauthorized));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:EncryptionKey"]));
