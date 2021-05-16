@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using TASI.Backend.Domain;
+using TASI.Backend.Domain.Users.Entities;
 using TASI.Backend.Domain.Users.Handlers;
+using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
 {
@@ -12,15 +18,17 @@ namespace TASI.Backend.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private readonly ILogger<UsersController> _logger;
         private readonly IMediator _mediator;
 
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator, ILogger<UsersController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
-        [HttpPost("authenticate")]
         [AllowAnonymous]
+        [HttpPost("authenticate")]
         public async Task<IActionResult> Login(LoginCommand model)
         {
             try
@@ -29,7 +37,32 @@ namespace TASI.Backend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+        
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            try
+            {
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return StatusCode((int) HttpStatusCode.Forbidden,
+                        new ErrorModel(ErrorMessages.NameIdentifierNull, ErrorCodes.NameIdentifierIsEmpty));
+                }
+
+                return await _mediator.Send(new GetProfileCommand
+                {
+                    UserId = int.Parse(userId)
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
             }
         }
     }
