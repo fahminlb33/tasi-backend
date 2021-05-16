@@ -59,6 +59,8 @@ namespace TASI.Backend.Domain.Users.Handlers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:EncryptionKey"]));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = _config["JWT:Issuer"],
+                Audience = _config["JWT:Audience"],
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature),
                 Subject = new ClaimsIdentity(new[]
