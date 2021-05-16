@@ -1,0 +1,87 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TASI.Backend.Domain.Orders.Entities;
+using TASI.Backend.Domain.Products.Entities;
+using TASI.Backend.Domain.Suppliers.Entities;
+using TASI.Backend.Domain.Users.Entities;
+
+namespace TASI.Backend.Infrastructure.Database
+{
+    public class TasiContext : DbContext
+    {
+        public TasiContext(DbContextOptions<TasiContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Login> Logins { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            SetupGeneratedDates(modelBuilder.Entity<Login>());
+            modelBuilder.Entity<Login>()
+                .HasOne(x => x.User)
+                .WithOne(x => x.Login)
+                .HasForeignKey<User>(x => x.UserId);
+            modelBuilder.Entity<Login>()
+                .HasIndex(x => x.Username)
+                .IsUnique();
+
+            SetupGeneratedDates(modelBuilder.Entity<User>());
+            modelBuilder.Entity<User>()
+                .HasOne(x => x.Login)
+                .WithOne(x => x.User);
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.FullName)
+                .IsUnique();
+
+            SetupGeneratedDates(modelBuilder.Entity<Stock>());
+            modelBuilder.Entity<Stock>()
+                .HasOne(x => x.Product)
+                .WithMany(x => x.Stocks);
+
+            SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(x => x.Product)
+                .WithMany(x => x.OrderDetails);
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(x => x.Order)
+                .WithMany(x => x.OrderDetails);
+
+            SetupGeneratedDates(modelBuilder.Entity<Order>());
+            modelBuilder.Entity<Order>()
+                .HasMany(x => x.OrderDetails)
+                .WithOne(x => x.Order);
+            modelBuilder.Entity<Order>()
+                .HasOne(x => x.Supplier)
+                .WithOne()
+                .HasForeignKey<Order>(x => x.SupplierId);
+            modelBuilder.Entity<Order>()
+                .HasOne(x => x.PicUser)
+                .WithOne()
+                .HasForeignKey<Order>(x => x.PicUserId);
+            
+            SetupGeneratedDates(modelBuilder.Entity<Supplier>());
+            modelBuilder.Entity<Supplier>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
+            SetupGeneratedDates(modelBuilder.Entity<Product>());
+            modelBuilder.Entity<Product>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+        }
+
+        private void SetupGeneratedDates<T>(EntityTypeBuilder<T> entity) where T : class, IDaoEntity
+        {
+            entity.Property(x => x.ModifiedDate)
+                .HasDefaultValueSql("GETDATE()")
+                .ValueGeneratedOnAddOrUpdate();
+        }
+    }
+}
