@@ -18,12 +18,9 @@ namespace TASI.Backend.Infrastructure.Registrations
                 })
                 .AddJwtBearer(options =>
                 {
-                    options.SaveToken = true;
-                    options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:EncryptionKey"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:EncryptionKey"])),
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,

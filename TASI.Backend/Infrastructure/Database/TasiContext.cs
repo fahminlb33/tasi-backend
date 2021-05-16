@@ -12,8 +12,7 @@ namespace TASI.Backend.Infrastructure.Database
         public TasiContext(DbContextOptions<TasiContext> options) : base(options)
         {
         }
-
-        public DbSet<Login> Logins { get; set; }
+        
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -23,23 +22,6 @@ namespace TASI.Backend.Infrastructure.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SetupGeneratedDates(modelBuilder.Entity<Login>());
-            modelBuilder.Entity<Login>()
-                .HasOne(x => x.User)
-                .WithOne(x => x.Login)
-                .HasForeignKey<User>(x => x.UserId);
-            modelBuilder.Entity<Login>()
-                .HasIndex(x => x.Username)
-                .IsUnique();
-
-            SetupGeneratedDates(modelBuilder.Entity<User>());
-            modelBuilder.Entity<User>()
-                .HasOne(x => x.Login)
-                .WithOne(x => x.User);
-            modelBuilder.Entity<User>()
-                .HasIndex(x => x.FullName)
-                .IsUnique();
-
             SetupGeneratedDates(modelBuilder.Entity<Stock>());
             modelBuilder.Entity<Stock>()
                 .HasOne(x => x.Product)

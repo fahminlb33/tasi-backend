@@ -7,14 +7,14 @@ namespace TASI.Backend.Infrastructure.Registrations
 {
     public static class SwaggerRegistration
     {
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, string title, string version)
         {
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
+                options.SwaggerDoc(version, new OpenApiInfo
                 {
-                    Title = "TASI", 
-                    Version = "v1"
+                    Title = title, 
+                    Version = version
                 });
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -36,10 +36,10 @@ namespace TASI.Backend.Infrastructure.Registrations
             return services;
         }
 
-        public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app)
+        public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app, string name, string version)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Codingku API v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{version}/swagger.json", name));
 
             return app;
         }
