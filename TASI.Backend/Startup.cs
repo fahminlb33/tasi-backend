@@ -1,5 +1,6 @@
 using System.Reflection;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;
+using TASI.Backend.Infrastructure.Filters;
 using TASI.Backend.Infrastructure.Registrations;
 
 namespace TASI.Backend
@@ -43,6 +45,7 @@ namespace TASI.Backend
             services.AddCustomHealthChecks(Configuration);
        
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IAuthorizationEvaluator, CustomAuthorizationEvaluator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TASI.Backend.Infrastructure.Filters;
@@ -17,13 +18,12 @@ namespace TASI.Backend.Infrastructure.Registrations
                     Version = version
                 });
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
-                    Scheme = "Bearer",
-                    Description = "Enter 'Bearer' following by space and JWT.",
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    Description = "Enter JWT token from user login API.",
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
-
                 });
 
                 options.OperationFilter<SwaggerAuthorizeCheckOperationFilter>();

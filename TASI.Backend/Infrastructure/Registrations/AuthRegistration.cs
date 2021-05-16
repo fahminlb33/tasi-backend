@@ -1,9 +1,14 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using TASI.Backend.Domain;
+using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Infrastructure.Registrations
 {
@@ -18,6 +23,7 @@ namespace TASI.Backend.Infrastructure.Registrations
                 })
                 .AddJwtBearer(options =>
                 {
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:EncryptionKey"])),
@@ -26,6 +32,20 @@ namespace TASI.Backend.Infrastructure.Registrations
                         ValidateLifetime = true,
                         ValidIssuer = config["JWT:Issuer"],
                         ValidAudience = config["JWT:Audience"],
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = async context =>
+                        {
+                            await context.Response.WriteAsJsonAsync(new ErrorModel(ErrorMessages.Unauthorized,
+                                ErrorCodes.Unauthorized));
+                        },
+                        OnForbidden = async context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            await context.Response.WriteAsJsonAsync(new ErrorModel(ErrorMessages.Forbidden,
+                                ErrorCodes.Forbidden));
+                        }
                     };
                 });
             services.AddAuthorization();
