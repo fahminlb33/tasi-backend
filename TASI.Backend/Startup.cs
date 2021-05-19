@@ -29,7 +29,7 @@ namespace TASI.Backend
         {
             services.AddOptions();
             services.AddMemoryCache();
-            services.AddAutoMapper(typeof(ObjectMapperProfile));
+            services.AddAutoMapper(typeof(UserDomainMapperProfile));
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddDbContext<TasiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));

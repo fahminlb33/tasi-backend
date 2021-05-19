@@ -9,7 +9,8 @@ namespace TASI.Backend.Infrastructure.Resources
         NotFound,
         ModelValidation,
         UnhandledException,
-        NameIdentifierIsEmpty
+        NameIdentifierIsEmpty,
+        DataDuplicated
     }
 
     public static class ErrorMessages

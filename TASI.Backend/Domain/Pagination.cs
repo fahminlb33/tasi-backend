@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TASI.Backend.Domain
 {
-    public class Pagination
+    public record Pagination<T>(int Page, int Size, int TotalRecords, IList<T> Data)
     {
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
-        public int? TotalRecords { get; set; }
-        public int? TotalPages => TotalRecords.HasValue ? (int)Math.Ceiling(TotalRecords.Value / (double)PageSize) : (int?)null;
+        public int TotalPages => (int) Math.Ceiling(TotalRecords / (double) Size);
 
-        public bool HasPrevious => PageNumber > 1;
-        public bool HasNext => PageNumber < TotalPages;
+        public bool HasPrevious => Page > 1;
+        public bool HasNext => Page < TotalPages;
     }
 }

@@ -4,7 +4,6 @@
     {
         SuperAdmin,
         Supervisor,
-        Manager,
-        Secretary
+        Manager
     }
 }

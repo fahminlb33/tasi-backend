@@ -41,7 +41,51 @@ namespace TASI.Backend.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
             }
         }
-        
+
+        [HttpPost]
+        [Authorize(Roles = nameof(UserRole.SuperAdmin))]
+        public async Task<IActionResult> Create(CreateUserCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = nameof(UserRole.SuperAdmin))]
+        public async Task<IActionResult> Delete(DeleteUserCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete([FromQuery] GetUsersCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
