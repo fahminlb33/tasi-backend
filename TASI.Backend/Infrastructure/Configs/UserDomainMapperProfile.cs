@@ -11,8 +11,12 @@ namespace TASI.Backend.Infrastructure.Configs
         {
             CreateMap<User, UserProfileDto>();
 
-            CreateMap<CreateUserCommand, User>();
-            CreateMap<CreateUserLoginDto, User>();
+            CreateMap<CreateUserCommand, User>()
+                .ForMember(x => x.Password, options => options.AddTransform(x => BCrypt.Net.BCrypt.HashPassword(x)));
+            CreateMap<EditUserCommandBody, User>()
+                .ForMember(x => x.UserId, options => options.Ignore())
+                .ForAllOtherMembers(options =>
+                    options.Condition((_, _, member) => member != null));
         }
     }
 }

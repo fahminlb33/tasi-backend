@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain;
 using TASI.Backend.Domain.Users.Entities;
 using TASI.Backend.Domain.Users.Handlers;
+using TASI.Backend.Infrastructure.Filters;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
@@ -29,7 +29,7 @@ namespace TASI.Backend.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Login(LoginCommand model)
+        public async Task<IActionResult> Login([FromBody] LoginCommand model)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace TASI.Backend.Controllers
 
         [HttpPost]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Create(CreateUserCommand model)
+        public async Task<IActionResult> Create([FromBody] CreateUserCommand model)
         {
             try
             {
@@ -57,13 +57,32 @@ namespace TASI.Backend.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPut("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Delete(DeleteUserCommand model)
+        public async Task<IActionResult> Update([FromRoute] int userId, [FromBody] EditUserCommandBody body)
         {
             try
             {
-                return await _mediator.Send(model);
+                return await _mediator.Send(new EditUserCommand
+                {
+                    UserId = userId,
+                    Body = body
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpDelete("{userId}")]
+        [Authorize(Roles = nameof(UserRole.SuperAdmin))]
+        public async Task<IActionResult> Delete([FromRoute] int userId)
+        {
+            try
+            {
+                return await _mediator.Send(new DeleteUserCommand { UserId = userId });
             }
             catch (Exception ex)
             {
@@ -73,7 +92,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete([FromQuery] GetUsersCommand model)
+        public async Task<IActionResult> GetUsers([FromQuery] GetUsersCommand model)
         {
             try
             {
@@ -86,22 +105,12 @@ namespace TASI.Backend.Controllers
             }
         }
 
-        [HttpGet("profile")]
-        public async Task<IActionResult> GetProfile()
+        [HttpGet("profile/{userId?}")]
+        public async Task<IActionResult> GetProfile([FromRoute] int? userId)
         {
             try
             {
-                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (userId == null)
-                {
-                    return StatusCode((int) HttpStatusCode.Forbidden,
-                        new ErrorModel(ErrorMessages.NameIdentifierNull, ErrorCodes.NameIdentifierIsEmpty));
-                }
-
-                return await _mediator.Send(new GetProfileCommand
-                {
-                    UserId = int.Parse(userId)
-                });
+                return await _mediator.Send(new GetProfileCommand { UserId = userId });
             }
             catch (Exception ex)
             {

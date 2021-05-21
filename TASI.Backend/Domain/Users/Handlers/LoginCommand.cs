@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,16 +22,7 @@ namespace TASI.Backend.Domain.Users.Handlers
         public string Username { get; set; }
         public string Password { get; set; }
     }
-
-    public class LoginCommandValidator : AbstractValidator<LoginCommand>
-    {
-        public LoginCommandValidator()
-        {
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.Password).NotEmpty();
-        }
-    }
-
+    
     public class LoginCommandHandler : IRequestHandler<LoginCommand, IActionResult>
     {
         private readonly ILogger<LoginCommandHandler> _logger;

@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Infrastructure.Database;
+using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Domain.Users.Handlers
 {
@@ -12,15 +12,7 @@ namespace TASI.Backend.Domain.Users.Handlers
     {
         public int UserId { get; set; }
     }
-
-    public class DeleteUserValidator : AbstractValidator<DeleteUserCommand>
-    {
-        public DeleteUserValidator()
-        {
-            RuleFor(x => x.UserId).Must(x => x > 0);
-        }
-    }
-
+    
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, IActionResult>
     {
         private readonly ILogger<CreateUserCommandHandler> _logger;
@@ -36,10 +28,13 @@ namespace TASI.Backend.Domain.Users.Handlers
         {
             _logger.LogDebug("Deleting user {0}", request.UserId);
             var user = await _context.Users.FindAsync(request.UserId);
-            if (user != null)
+            if (user == null)
             {
-                _context.Users.Remove(user);
+                return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
             }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync(cancellationToken);
 
             return new OkResult();
         }

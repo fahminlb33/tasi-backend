@@ -1,10 +1,11 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,17 +23,7 @@ namespace TASI.Backend.Domain.Users.Handlers
         public string? Query { get; set; }
         public UserRole? Role { get;set; }
     }
-
-    public class GetUsersCommandValidator : AbstractValidator<GetUsersCommand>
-    {
-        public GetUsersCommandValidator()
-        {
-            RuleFor(x => x.Limit).GreaterThan(0);
-            RuleFor(x => x.Page).GreaterThanOrEqualTo(0);
-            RuleFor(x => x.Role).IsInEnum();
-        }
-    }
-
+    
     public class GetUsersCommandHandler : IRequestHandler<GetUsersCommand, IActionResult>
     {
         private readonly ILogger<CreateUserCommandHandler> _logger;

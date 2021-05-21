@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using System.Reflection;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using TASI.Backend.Domain;
 using TASI.Backend.Infrastructure.Resources;
@@ -16,18 +15,17 @@ namespace TASI.Backend.Infrastructure.Registrations
             {
                 setup.InvalidModelStateResponseFactory = context =>
                 {
-                    return new BadRequestObjectResult(new ErrorModel(ErrorMessages.ModelValidation, ErrorCodes.ModelValidation,
-                        context.ModelState.Select(x => new
+                    var data = context.ModelState
+                        .Where(x => x.Value.ValidationState != ModelValidationState.Valid)
+                        .Select(x => new
                         {
                             Field = x.Key,
                             Message = x.Value.Errors.Aggregate("", (s, error) => $"{s}{error.ErrorMessage}, ")[..^2]
-                        })));
+                        });
+
+                    var model = new ErrorModel(ErrorMessages.ModelValidation, ErrorCodes.ModelValidation, data);
+                    return new BadRequestObjectResult(model);
                 };
-            });
-            mvc.AddFluentValidation(options =>
-            {
-                options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             });
 
             return mvc;

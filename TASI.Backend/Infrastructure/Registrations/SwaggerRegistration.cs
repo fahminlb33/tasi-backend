@@ -26,9 +26,14 @@ namespace TASI.Backend.Infrastructure.Registrations
                     Type = SecuritySchemeType.Http,
                 });
 
+                options.OperationFilter<SwaggerOptionalRouteParameterOperationFilter>();
                 options.OperationFilter<SwaggerAuthorizeCheckOperationFilter>();
-                //options.AddFluentValidationRules();
                 options.EnableAnnotations();
+                options.DescribeAllParametersInCamelCase();
+
+                // disabled due to incompatibility
+                // MicroElements.Swashbuckle.FluentValidation requires FluentValidation < 10.0.0
+                // options.AddFluentValidationRules()
             });
 
             services.AddSwaggerGenNewtonsoftSupport();

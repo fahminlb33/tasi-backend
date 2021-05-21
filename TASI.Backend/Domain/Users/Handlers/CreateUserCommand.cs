@@ -2,11 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Users.Dto;
 using TASI.Backend.Domain.Users.Entities;
@@ -22,18 +20,7 @@ namespace TASI.Backend.Domain.Users.Handlers
         public string Username { get; set; }
         public string Password { get; set; }
     }
-
-    public class CreateUserValidator : AbstractValidator<CreateUserCommand>
-    {
-        public CreateUserValidator()
-        {
-            RuleFor(x => x.FullName).NotEmpty().Length(5, 50);
-            RuleFor(x => x.Role).IsInEnum().Must(x => x != UserRole.SuperAdmin);
-            RuleFor(x => x.Username).NotEmpty().Length(5, 20);
-            RuleFor(x => x.Password).NotEmpty().Length(5, 20);
-        }
-    }
-
+    
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, IActionResult>
     {
         private readonly ILogger<CreateUserCommandHandler> _logger;

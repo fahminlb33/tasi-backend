@@ -34,7 +34,7 @@ namespace TASI.Backend
 
             services.AddDbContext<TasiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-            
+
             services.AddControllers()
                 .AddCustomNewtonsoftJson()
                 .AddCustomValidator();
