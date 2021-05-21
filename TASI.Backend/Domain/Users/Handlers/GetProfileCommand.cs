@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Users.Dto;
@@ -19,18 +20,29 @@ namespace TASI.Backend.Domain.Users.Handlers
     public class GetProfileCommandHandler : IRequestHandler<GetProfileCommand, IActionResult>
     {
         private readonly ILogger<GetProfileCommandHandler> _logger;
+        private readonly IHttpContextAccessor _httpContext;
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public GetProfileCommandHandler(TasiContext context, IMapper mapper, ILogger<GetProfileCommandHandler> logger)
+        public GetProfileCommandHandler(TasiContext context, IMapper mapper, ILogger<GetProfileCommandHandler> logger, IHttpContextAccessor httpContext)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _httpContext = httpContext;
         }
 
         public async Task<IActionResult> Handle(GetProfileCommand request, CancellationToken cancellationToken)
         {
+            if (request.UserId == null)
+            {
+                var idFromClaim = _httpContext.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (int.TryParse(idFromClaim, out var id))
+                {
+                    request.UserId = id;
+                }
+            }
+
             _logger.LogDebug("Getting user profile for ID {0}", request.UserId);
             var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)
