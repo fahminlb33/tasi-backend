@@ -62,7 +62,8 @@ namespace TASI.Backend.Infrastructure.Database
         private void SetupGeneratedDates<T>(EntityTypeBuilder<T> entity) where T : class, IDaoEntity
         {
             entity.Property(x => x.ModifiedDate)
-                .HasDefaultValueSql("GETDATE()")
+                //.HasDefaultValueSql("GETDATE()") // for SQL Server
+                .HasDefaultValueSql("DATETIME('NOW')")
                 .ValueGeneratedOnAddOrUpdate();
         }
     }
