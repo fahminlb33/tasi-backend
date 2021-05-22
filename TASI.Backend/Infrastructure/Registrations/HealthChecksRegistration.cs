@@ -19,21 +19,21 @@ namespace TASI.Backend.Infrastructure.Registrations
             services.AddHealthChecks()
                 .AddCheck("backend", () => HealthCheckResult.Healthy())
                 .AddDbContextCheck<TasiContext>("data-context")
-                .AddSqlite(config.GetConnectionString("DefaultConnection"), name: "sqlite")
-                .AddAsyncCheck("internet", async _ =>
-                {
-                    try
-                    {
-                        var result = await new Ping().SendPingAsync("google.com");
-                        return result.Status == IPStatus.Success
-                            ? HealthCheckResult.Healthy()
-                            : HealthCheckResult.Degraded();
-                    }
-                    catch (Exception ex)
-                    {
-                        return HealthCheckResult.Degraded(ex.Message);
-                    }
-                });
+                .AddSqlite(config.GetConnectionString("DefaultConnection"), name: "sqlite");
+                //.AddAsyncCheck("internet", async _ =>
+                //{
+                //    try
+                //    {
+                //        var result = await new Ping().SendPingAsync("google.com");
+                //        return result.Status == IPStatus.Success
+                //            ? HealthCheckResult.Healthy()
+                //            : HealthCheckResult.Degraded();
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        return HealthCheckResult.Degraded(ex.Message);
+                //    }
+                //});
             
             services.AddHealthChecksUI(settings =>
                 {
