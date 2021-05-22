@@ -55,6 +55,34 @@ namespace TASI.Backend.Controllers
             }
         }
 
+        [HttpGet("profile/{userId?}")]
+        public async Task<IActionResult> GetProfile([FromRoute] int? userId)
+        {
+            try
+            {
+                return await _mediator.Send(new GetProfileCommand { UserId = userId });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] GetUsersCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand model)
         {
@@ -95,34 +123,6 @@ namespace TASI.Backend.Controllers
             try
             {
                 return await _mediator.Send(new DeleteUserCommand { UserId = userId });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetUsersCommand model)
-        {
-            try
-            {
-                return await _mediator.Send(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
-            }
-        }
-
-        [HttpGet("profile/{userId?}")]
-        public async Task<IActionResult> GetProfile([FromRoute] int? userId)
-        {
-            try
-            {
-                return await _mediator.Send(new GetProfileCommand { UserId = userId });
             }
             catch (Exception ex)
             {
