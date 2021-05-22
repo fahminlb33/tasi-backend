@@ -29,6 +29,37 @@ namespace TASI.Backend.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> Get([FromRoute, Required] int productId)
+        {
+            try
+            {
+                return await _mediator.Send(new GetProductCommand
+                {
+                    ProductId = productId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] GetProductsCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody, Required] CreateProductCommand model)
         {
