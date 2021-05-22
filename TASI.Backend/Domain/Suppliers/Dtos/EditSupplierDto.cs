@@ -1,4 +1,6 @@
-﻿namespace TASI.Backend.Domain.Suppliers.Dtos
+﻿#nullable enable
+
+namespace TASI.Backend.Domain.Suppliers.Dtos
 {
     public class EditSupplierDto
     {

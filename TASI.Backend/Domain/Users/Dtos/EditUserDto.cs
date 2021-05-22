@@ -1,4 +1,6 @@
-﻿using TASI.Backend.Domain.Users.Entities;
+﻿#nullable enable
+
+using TASI.Backend.Domain.Users.Entities;
 
 namespace TASI.Backend.Domain.Users.Dtos
 {

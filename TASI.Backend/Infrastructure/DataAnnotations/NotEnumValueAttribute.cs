@@ -15,22 +15,21 @@ namespace TASI.Backend.Infrastructure.DataAnnotations
             Values = values;
         }
 
-        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
             {
                 return new ValidationResult("Value must not be empty.");
             }
 
-            if (Enum.TryParse(Type, value.ToString(), out var result))
+            if (!Enum.TryParse(Type, value.ToString(), out var result))
             {
-                if (Values.Any(x => x.Equals(result)))
-                {
-                    return new ValidationResult("The specified value is not valid");
-                }
+                return ValidationResult.Success;
             }
 
-            return ValidationResult.Success;
+            return Values.Any(x => x.Equals(result)) 
+                ? new ValidationResult("The specified value is not valid") 
+                : ValidationResult.Success;
         }
         
     }
