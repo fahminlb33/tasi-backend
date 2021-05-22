@@ -1,14 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TASI.Backend.Domain;
 using TASI.Backend.Domain.Users.Entities;
 using TASI.Backend.Domain.Users.Handlers;
-using TASI.Backend.Infrastructure.Filters;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
@@ -59,7 +58,7 @@ namespace TASI.Backend.Controllers
 
         [HttpPut("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Update([FromRoute] int userId, [FromBody] EditUserCommandBody body)
+        public async Task<IActionResult> Update([FromRoute, Required] int userId, [FromBody] EditUserCommandBody body)
         {
             try
             {
@@ -78,7 +77,7 @@ namespace TASI.Backend.Controllers
 
         [HttpDelete("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Delete([FromRoute] int userId)
+        public async Task<IActionResult> Delete([FromRoute, Required] int userId)
         {
             try
             {
