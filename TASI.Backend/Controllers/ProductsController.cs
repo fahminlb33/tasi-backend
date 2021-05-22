@@ -88,5 +88,22 @@ namespace TASI.Backend.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
             }
         }
+
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> Delete([FromRoute, Required] int productId)
+        {
+            try
+            {
+                return await _mediator.Send(new DeleteProductCommand
+                {
+                    ProductId = productId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
     }
 }
