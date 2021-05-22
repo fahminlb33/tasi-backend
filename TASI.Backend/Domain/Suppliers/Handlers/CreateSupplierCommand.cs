@@ -38,8 +38,6 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
         public async Task<IActionResult> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Creating new supplier {0}", request.Name);
-
             if (await _context.Suppliers.AnyAsync(x =>
                 x.Name.ToLower() == request.Name.ToLower() , cancellationToken))
             {
@@ -51,7 +49,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             await _context.Suppliers.AddAsync(supplier, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Created new supplier {0}", request.Name);
+            _logger.LogInformation("Created supplier {0} with ID {1}", supplier.Name, supplier.SupplierId);
             return new JsonResult(await _context.Suppliers.FindAsync(supplier.SupplierId));
 
         }

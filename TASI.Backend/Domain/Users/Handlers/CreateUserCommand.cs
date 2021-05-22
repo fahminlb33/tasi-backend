@@ -49,9 +49,6 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         public async Task<IActionResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Creating new user {0}", request.FullName);
-
-
             if (await _context.Users.AnyAsync(x =>
                 x.Username.ToLower() == request.Username.ToLower() ||
                 x.FullName.ToLower() == request.FullName.ToLower(), cancellationToken))
@@ -64,7 +61,8 @@ namespace TASI.Backend.Domain.Users.Handlers
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new JsonResult(_mapper.Map<UserProfileDto>(await _context.Users.FindAsync(user.UserId)));
+            _logger.LogInformation("Created user {0} with ID {1}", user.FullName, user.UserId);
+            return new JsonResult(_mapper.Map<UserProfileDto>(user));
         }
     }
 }

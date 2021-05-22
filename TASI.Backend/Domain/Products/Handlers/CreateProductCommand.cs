@@ -46,8 +46,6 @@ namespace TASI.Backend.Domain.Products.Handlers
 
         public async Task<IActionResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Creating new product {0}", request.Name);
-
             if (await _context.Products.AnyAsync(x =>
                 x.Name.ToLower() == request.Name.ToLower() || 
                 x.Barcode.ToLower() == request.Barcode.ToLower(), cancellationToken))
@@ -60,8 +58,8 @@ namespace TASI.Backend.Domain.Products.Handlers
             await _context.Products.AddAsync(product, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Created new product {0}", request.Name);
-            return new JsonResult(await _context.Products.FindAsync(product.ProductId));
+            _logger.LogInformation("Created product {0} with ID", product.Name, product.ProductId);
+            return new JsonResult(product);
         }
     }
 }

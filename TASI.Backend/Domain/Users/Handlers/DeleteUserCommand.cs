@@ -26,7 +26,6 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         public async Task<IActionResult> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Deleting user {0}", request.UserId);
             var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)
             {
@@ -36,6 +35,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync(cancellationToken);
 
+            _logger.LogInformation("Deleted user with ID {0}", request.UserId);
             return new OkResult();
         }
     }

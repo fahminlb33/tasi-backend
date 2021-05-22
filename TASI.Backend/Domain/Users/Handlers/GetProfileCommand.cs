@@ -43,13 +43,13 @@ namespace TASI.Backend.Domain.Users.Handlers
                 }
             }
 
-            _logger.LogDebug("Getting user profile for ID {0}", request.UserId);
             var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
             }
 
+            _logger.LogInformation("Found user profile for ID {0}", user.UserId);
             return new JsonResult(_mapper.Map<UserProfileDto>(user));
         }
     }

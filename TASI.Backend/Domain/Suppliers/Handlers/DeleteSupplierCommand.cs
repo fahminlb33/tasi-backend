@@ -29,8 +29,6 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
         public async Task<IActionResult> Handle(DeleteSupplierCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Deleting supplier for ID {0}", request.SupplierId);
-
             var supplier = await _context.Suppliers.FindAsync(request.SupplierId);
             if (supplier == null)
             {
@@ -40,6 +38,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync(cancellationToken);
 
+            _logger.LogInformation("Deleted supplier with ID {0}", request.SupplierId);
             return new OkResult();
         }
     }

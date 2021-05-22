@@ -43,8 +43,6 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         public async Task<IActionResult> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Updating user {0}", request.UserId);
-
             var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)
             {
@@ -73,7 +71,8 @@ namespace TASI.Backend.Domain.Users.Handlers
             _context.Users.Update(updatedEntity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new JsonResult(_mapper.Map<UserProfileDto>(await _context.Users.FindAsync(user.UserId)));
+            _logger.LogInformation("Updated user with ID {0}", user.UserId);
+            return new JsonResult(_mapper.Map<UserProfileDto>(user));
         }
     }
 }

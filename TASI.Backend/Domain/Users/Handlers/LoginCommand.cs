@@ -40,7 +40,8 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         public async Task<IActionResult> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Logging in {0}", request.Username);
+            _logger.LogInformation("User {0} login attempt", request.Username);
+
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
@@ -65,7 +66,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            _logger.LogInformation("User {0} logged in", request.Username);
+            _logger.LogInformation("User {0} with ID {1} logged in", user.Username, user.UserId);
             return new JsonResult(new LoginResponseDto
             {
                 Profile = _mapper.Map<UserProfileDto>(user),

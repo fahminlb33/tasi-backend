@@ -39,8 +39,6 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         public async Task<IActionResult> Handle(GetUsersCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Finding users {0} and role {1}", request.Query, request.Role);
-
             var skipCount = request.Page * request.Limit;
             var query = _context.Users.AsQueryable();
             if (request.Query != null)
@@ -57,6 +55,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             var totalRecords = await query.CountAsync(cancellationToken);
             var resultDto = _mapper.Map<IList<UserProfileDto>>(result);
 
+            _logger.LogInformation("Found users with query {0} and role {1}, result: {2} records", request.Query, request.Role, totalRecords);
             return new JsonResult(new Pagination<UserProfileDto>(request.Page, result.Count, totalRecords, resultDto));
         }
     }

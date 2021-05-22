@@ -30,8 +30,6 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
         public async Task<IActionResult> Handle(GetSuppliersCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Finding suppliers with query {0}", request.Query);
-
             var skipCount = request.Page * request.Limit;
             var query = _context.Suppliers.AsQueryable();
             if (request.Query != null)
@@ -43,6 +41,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             var result = await query.Skip(skipCount).Take(request.Limit).ToListAsync(cancellationToken);
             var totalRecords = await query.CountAsync(cancellationToken);
 
+            _logger.LogInformation("Find suppliers data with query {0}, result: {1} records", request.Query, totalRecords);
             return new JsonResult(new Pagination<Supplier>(request.Page, result.Count, totalRecords, result));
         }
     }

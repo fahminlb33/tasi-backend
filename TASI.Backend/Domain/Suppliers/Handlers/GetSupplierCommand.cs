@@ -26,14 +26,13 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
         public async Task<IActionResult> Handle(GetSupplierCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Getting supplier for ID {0}", request.SupplierId);
-
             var supplier = await _context.Suppliers.FindAsync(request.SupplierId);
             if (supplier == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
             }
 
+            _logger.LogInformation("Found supplier with ID {0}", request.SupplierId);
             return new JsonResult(supplier);
         }
     }

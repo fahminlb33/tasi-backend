@@ -42,8 +42,6 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
         public async Task<IActionResult> Handle(EditSupplierCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Updating supplier {0}", request.SupplierId);
-
             var supplier = await _context.Suppliers.FindAsync(request.SupplierId);
             if (supplier == null)
             {
@@ -63,7 +61,8 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             _context.Suppliers.Update(updatedEntity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new JsonResult(await _context.Suppliers.FindAsync(supplier.SupplierId));
+            _logger.LogInformation("Updated supplier with ID {0}", supplier.SupplierId);
+            return new JsonResult(supplier);
         }
     }
 }
