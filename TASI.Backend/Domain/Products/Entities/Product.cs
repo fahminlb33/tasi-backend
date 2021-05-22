@@ -12,8 +12,9 @@ namespace TASI.Backend.Domain.Products.Entities
         public int ProductId { get; set; }
         public string Barcode { get; set; }
         public string Name { get; set; }
+        public int Quantity { get; set; }
+        public QuantityUnit Unit { get; set; }
 
-        public ICollection<Stock> Stocks { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
         
         public DateTime ModifiedDate { get; set; }
