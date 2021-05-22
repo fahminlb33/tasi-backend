@@ -71,7 +71,7 @@ namespace TASI.Backend.Controllers
 
         [HttpPut("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Update([FromRoute, Required] int userId, [FromBody] EditUserCommandBody body)
+        public async Task<IActionResult> Edit([FromRoute, Required] int userId, [FromBody] EditUserCommandBody body)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers([FromQuery] GetUsersCommand model)
+        public async Task<IActionResult> GetAll([FromQuery] GetUsersCommand model)
         {
             try
             {

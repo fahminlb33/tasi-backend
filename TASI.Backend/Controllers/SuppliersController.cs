@@ -27,7 +27,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSuppliers([FromQuery] GetSuppliersCommand model)
+        public async Task<IActionResult> GetAll([FromQuery] GetSuppliersCommand model)
         {
             try
             {
