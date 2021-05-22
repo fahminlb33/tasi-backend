@@ -34,6 +34,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.4" />
+    <PackageReference Include="Unchase.Swashbuckle.AspNetCore.Extensions" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,7 +44,6 @@
     <Folder Include="Domain\Products\Dto\" />
     <Folder Include="Domain\Reports\Dto\" />
     <Folder Include="Domain\Reports\Handlers\" />
-    <Folder Include="Domain\Suppliers\Handlers\" />
     <Folder Include="Infrastructure\Helpers\" />
   </ItemGroup>
 

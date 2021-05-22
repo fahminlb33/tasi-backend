@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TASI.Backend.Infrastructure.Filters;
+using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace TASI.Backend.Infrastructure.Registrations
 {
@@ -28,12 +29,10 @@ namespace TASI.Backend.Infrastructure.Registrations
 
                 options.OperationFilter<SwaggerOptionalRouteParameterOperationFilter>();
                 options.OperationFilter<SwaggerAuthorizeCheckOperationFilter>();
+
                 options.EnableAnnotations();
                 options.DescribeAllParametersInCamelCase();
-
-                // disabled due to incompatibility
-                // MicroElements.Swashbuckle.FluentValidation requires FluentValidation < 10.0.0
-                // options.AddFluentValidationRules()
+                options.AddEnumsWithValuesFixFilters();
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
