@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TASI.Backend.Domain.Suppliers.Handlers;
 using TASI.Backend.Domain.Users.Handlers;
 using TASI.Backend.Infrastructure.Resources;
 
@@ -25,7 +26,21 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSuppliers([FromQuery] GetUsersCommand model)
+        public async Task<IActionResult> GetSuppliers([FromQuery] GetSuppliersCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateSupplierCommand model)
         {
             try
             {
