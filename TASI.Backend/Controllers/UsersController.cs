@@ -41,9 +41,8 @@ namespace TASI.Backend.Controllers
             }
         }
 
-        [HttpPost]
-        [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Create([FromBody] CreateUserCommand model)
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand model)
         {
             try
             {
