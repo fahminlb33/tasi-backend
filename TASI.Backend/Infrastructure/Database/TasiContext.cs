@@ -25,7 +25,7 @@ namespace TASI.Backend.Infrastructure.Database
             SetupGeneratedDates(modelBuilder.Entity<Stock>());
             modelBuilder.Entity<Stock>()
                 .HasOne(x => x.Product)
-                .WithMany(x => x.Stocks);
+                .WithOne(x => x.Stock);
 
             SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
             modelBuilder.Entity<OrderDetail>()
@@ -62,8 +62,8 @@ namespace TASI.Backend.Infrastructure.Database
         private void SetupGeneratedDates<T>(EntityTypeBuilder<T> entity) where T : class, IDaoEntity
         {
             entity.Property(x => x.ModifiedDate)
-                //.HasDefaultValueSql("GETDATE()") // for SQL Server
-                .HasDefaultValueSql("DATETIME('NOW')")
+                //.HasDefaultValueSql("GETDATE()")      // for SQL Server
+                .HasDefaultValueSql("DATETIME('NOW')")  // for SQLite
                 .ValueGeneratedOnAddOrUpdate();
         }
     }
