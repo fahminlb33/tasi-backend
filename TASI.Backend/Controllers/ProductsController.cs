@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using TASI.Backend.Domain.Products.Dtos;
 using TASI.Backend.Domain.Products.Handlers;
-using TASI.Backend.Domain.Suppliers.Handlers;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
@@ -66,6 +63,24 @@ namespace TASI.Backend.Controllers
             try
             {
                 return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpPut("{productId}")]
+        public async Task<IActionResult> Edit([FromRoute, Required] int productId, [FromBody] EditProductDto body)
+        {
+            try
+            {
+                return await _mediator.Send(new EditProductCommand
+                {
+                    ProductId = productId,
+                    Body = body
+                });
             }
             catch (Exception ex)
             {
