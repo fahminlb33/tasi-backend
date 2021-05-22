@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -40,11 +41,29 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateSupplierCommand model)
+        public async Task<IActionResult> Create([FromBody, Required] CreateSupplierCommand model)
         {
             try
             {
                 return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpPost("{supplierId}")]
+        public async Task<IActionResult> Edit([FromRoute, Required] int supplierId, [FromBody] EditSupplierCommandBody body)
+        {
+            try
+            {
+                return await _mediator.Send(new EditSupplierCommand
+                {
+                    SupplierId = supplierId,
+                    Body = body
+                });
             }
             catch (Exception ex)
             {
