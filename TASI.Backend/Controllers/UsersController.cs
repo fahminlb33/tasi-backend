@@ -55,6 +55,20 @@ namespace TASI.Backend.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateUserCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
         [HttpPut("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
         public async Task<IActionResult> Update([FromRoute, Required] int userId, [FromBody] EditUserCommandBody body)
