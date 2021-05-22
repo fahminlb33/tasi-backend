@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TASI.Backend.Domain.Suppliers.Dtos;
 using TASI.Backend.Domain.Suppliers.Entities;
 using TASI.Backend.Domain.Suppliers.Handlers;
 using TASI.Backend.Domain.Users.Entities;
@@ -11,7 +12,7 @@ namespace TASI.Backend.Infrastructure.Configs
         public SupplierDomainMapperProfile()
         {
             CreateMap<CreateSupplierCommand, Supplier>();
-            CreateMap<EditSupplierCommandBody, Supplier>()
+            CreateMap<EditSupplierDto, Supplier>()
                 .ForMember(x => x.SupplierId, options => options.Ignore())
                 .ForAllOtherMembers(options =>
                     options.Condition((_, _, member) => member != null));

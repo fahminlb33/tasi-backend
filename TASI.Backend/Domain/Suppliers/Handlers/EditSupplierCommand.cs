@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using TASI.Backend.Domain.Suppliers.Dtos;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
 
@@ -18,13 +19,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
     public class EditSupplierCommand : IRequest<IActionResult>
     {
         public int SupplierId { get; set; }
-        public EditSupplierCommandBody? Body { get; set; }
-    }
-
-    public class EditSupplierCommandBody
-    {
-        public string? Name { get; set; }
-        public string? Address { get; set; }
+        public EditSupplierDto? Body { get; set; }
     }
 
     public class EditSupplierCommandHandler : IRequestHandler<EditSupplierCommand, IActionResult>

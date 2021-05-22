@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Users.Dto;
-using TASI.Backend.Domain.Users.Entities;
+using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
 
@@ -18,16 +18,9 @@ namespace TASI.Backend.Domain.Users.Handlers
     {
         public int UserId { get; set; }
         
-        public EditUserCommandBody? Body { get; set; }
+        public EditUserDto? Body { get; set; }
     }
 
-    public class EditUserCommandBody
-    {
-        public string? FullName { get; set; }
-        public UserRole? Role { get; set; }
-        public string? Username { get; set; }
-    }
-    
     public class EditUserCommandHandler : IRequestHandler<EditUserCommand, IActionResult>
     {
         private readonly ILogger<EditUserCommandHandler> _logger;

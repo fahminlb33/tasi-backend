@@ -40,7 +40,6 @@
   <ItemGroup>
     <Folder Include="Domain\Orders\Handlers\" />
     <Folder Include="Domain\Orders\Dto\" />
-    <Folder Include="Domain\Products\Dto\" />
     <Folder Include="Domain\Reports\Dto\" />
     <Folder Include="Domain\Reports\Handlers\" />
     <Folder Include="Infrastructure\Helpers\" />

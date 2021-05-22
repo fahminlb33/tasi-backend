@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Domain.Users.Entities;
 using TASI.Backend.Domain.Users.Handlers;
 using TASI.Backend.Infrastructure.Resources;
@@ -99,7 +100,7 @@ namespace TASI.Backend.Controllers
 
         [HttpPut("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Edit([FromRoute, Required] int userId, [FromBody] EditUserCommandBody body)
+        public async Task<IActionResult> Edit([FromRoute, Required] int userId, [FromBody] EditUserDto body)
         {
             try
             {

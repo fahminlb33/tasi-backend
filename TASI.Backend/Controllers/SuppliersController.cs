@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TASI.Backend.Domain.Suppliers.Dtos;
 using TASI.Backend.Domain.Suppliers.Handlers;
 using TASI.Backend.Domain.Users.Handlers;
 using TASI.Backend.Infrastructure.Resources;
@@ -72,14 +73,14 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPut("{supplierId}")]
-        public async Task<IActionResult> Edit([FromRoute, Required] int supplierId, [FromBody] EditSupplierCommandBody body)
+        public async Task<IActionResult> Edit([FromRoute, Required] int supplierId, [FromBody] EditSupplierDto dto)
         {
             try
             {
                 return await _mediator.Send(new EditSupplierCommand
                 {
                     SupplierId = supplierId,
-                    Body = body
+                    Body = dto
                 });
             }
             catch (Exception ex)
