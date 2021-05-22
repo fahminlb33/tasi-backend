@@ -1,4 +1,4 @@
-﻿namespace TASI.Backend.Domain.Orders.Entities
+﻿namespace TASI.Backend.Domain.Products.Entities
 {
     public enum QuantityUnit
     {
