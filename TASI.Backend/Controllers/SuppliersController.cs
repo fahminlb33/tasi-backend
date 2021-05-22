@@ -71,5 +71,22 @@ namespace TASI.Backend.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
             }
         }
+
+        [HttpGet("{supplierId}")]
+        public async Task<IActionResult> Get([FromRoute, Required] int supplierId)
+        {
+            try
+            {
+                return await _mediator.Send(new GetSupplierCommand
+                {
+                    SupplierId = supplierId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
     }
 }
