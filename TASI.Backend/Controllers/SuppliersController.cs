@@ -26,6 +26,23 @@ namespace TASI.Backend.Controllers
             _logger = logger;
         }
 
+        [HttpGet("{supplierId}")]
+        public async Task<IActionResult> Get([FromRoute, Required] int supplierId)
+        {
+            try
+            {
+                return await _mediator.Send(new GetSupplierCommand
+                {
+                    SupplierId = supplierId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetSuppliersCommand model)
         {
@@ -54,7 +71,7 @@ namespace TASI.Backend.Controllers
             }
         }
 
-        [HttpPost("{supplierId}")]
+        [HttpPut("{supplierId}")]
         public async Task<IActionResult> Edit([FromRoute, Required] int supplierId, [FromBody] EditSupplierCommandBody body)
         {
             try
@@ -72,12 +89,12 @@ namespace TASI.Backend.Controllers
             }
         }
 
-        [HttpGet("{supplierId}")]
-        public async Task<IActionResult> Get([FromRoute, Required] int supplierId)
+        [HttpDelete("{supplierId}")]
+        public async Task<IActionResult> Delete([FromRoute, Required] int supplierId)
         {
             try
             {
-                return await _mediator.Send(new GetSupplierCommand
+                return await _mediator.Send(new DeleteSupplierCommand
                 {
                     SupplierId = supplierId
                 });
