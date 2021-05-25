@@ -4,6 +4,7 @@
     {
         SuperAdmin,
         Supervisor,
-        Manager
+        Manager,
+        Customer
     }
 }
