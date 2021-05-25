@@ -39,7 +39,7 @@ namespace TASI.Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
             }
         }
 
@@ -53,7 +53,7 @@ namespace TASI.Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
             }
         }
 
@@ -67,7 +67,7 @@ namespace TASI.Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
             }
         }
 
@@ -85,7 +85,7 @@ namespace TASI.Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
             }
         }
 
@@ -102,7 +102,7 @@ namespace TASI.Backend.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessages.InternalExceptionModel);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
             }
         }
     }
