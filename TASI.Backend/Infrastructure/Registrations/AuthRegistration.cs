@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using TASI.Backend.Domain;
+using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Infrastructure.Registrations
@@ -16,6 +16,7 @@ namespace TASI.Backend.Infrastructure.Registrations
     {
         public static void AddCustomAuth(this IServiceCollection services, IConfiguration config)
         {
+            var jwtConfig = config.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -26,12 +27,12 @@ namespace TASI.Backend.Infrastructure.Registrations
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:EncryptionKey"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.EncryptionKey)),
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        ValidIssuer = config["JWT:Issuer"],
-                        ValidAudience = config["JWT:Audience"],
+                        ValidIssuer = jwtConfig.Issuer,
+                        ValidAudience = jwtConfig.Audience,
                     };
                     options.Events = new JwtBearerEvents
                     {
