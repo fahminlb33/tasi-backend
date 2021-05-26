@@ -11,8 +11,12 @@ namespace TASI.Backend.Domain.Orders.Entities
     {
         [Key]
         public int OrderId { get; set; }
-        public OrderStatus StatusCode { get; set; }
-        public string StatusMessage { get; set; }
+
+        public double TotalWeight { get; set; }
+        public decimal TotalSales { get; set; }
+        public decimal TotalShipping { get; set; }
+        public decimal TotalTax { get; set; }
+        public decimal SubTotal { get; set; }
 
         public int SupplierId { get; set; }
         public Supplier Supplier { get; set; }
@@ -20,6 +24,7 @@ namespace TASI.Backend.Domain.Orders.Entities
         public User PicUser { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
+        public ICollection<OrderStatusHistory> StatusHistory { get; set; }
         
         public DateTime ModifiedDate { get; set; }
     }
