@@ -10,7 +10,7 @@ using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class MapsController : ControllerBase
