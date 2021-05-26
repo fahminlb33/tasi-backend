@@ -9,5 +9,6 @@ namespace TASI.Backend.Domain.Users.Dtos
         public string? FullName { get; set; }
         public UserRole? Role { get; set; }
         public string? Username { get; set; }
+        public decimal? ShippingCost { get; set; }
     }
 }

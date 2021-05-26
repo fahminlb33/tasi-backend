@@ -1,4 +1,4 @@
-﻿namespace TASI.Backend.Domain.Users.Dto
+﻿namespace TASI.Backend.Domain.Users.Dtos
 {
     public class LoginResponseDto
     {

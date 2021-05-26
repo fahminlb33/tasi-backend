@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TASI.Backend.Domain.Users.Dto;
 using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;

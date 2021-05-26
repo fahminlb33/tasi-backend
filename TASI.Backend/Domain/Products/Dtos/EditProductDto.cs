@@ -9,5 +9,7 @@ namespace TASI.Backend.Domain.Products.Dtos
         public string? Barcode { get; set; }
         public string? Name { get; set; }
         public QuantityUnit? Unit { get; set; }
+        public decimal? Price { get; set; }
+        public double? Weight { get; set; }
     }
 }

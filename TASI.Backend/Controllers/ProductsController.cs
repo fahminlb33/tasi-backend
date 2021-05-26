@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -58,7 +57,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody, Required] CreateProductCommand model)
+        public async Task<IActionResult> Create([FromBody] CreateProductCommand model)
         {
             try
             {

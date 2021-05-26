@@ -21,6 +21,9 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
         [Required]
         [StringLength(200, MinimumLength = 5)]
         public string Address { get; set; }
+
+        [Required]
+        public decimal ShippingCost { get; set; }
     }
 
     public class CreateSupplierCommandHandler : IRequestHandler<CreateSupplierCommand, IActionResult>

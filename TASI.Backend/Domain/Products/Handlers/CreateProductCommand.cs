@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TASI.Backend.Domain.Orders.Entities;
 using TASI.Backend.Domain.Products.Entities;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
@@ -24,11 +23,14 @@ namespace TASI.Backend.Domain.Products.Handlers
         public string Name { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
-
-        [Required]
         [EnumDataType(typeof(QuantityUnit))]
         public QuantityUnit Unit { get; set; }
+
+        [Required]
+        public decimal Price { get; set; }
+
+        [Required]
+        public double Weight { get; set; }
     }
 
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, IActionResult>

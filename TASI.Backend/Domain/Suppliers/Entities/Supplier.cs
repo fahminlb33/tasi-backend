@@ -10,6 +10,7 @@ namespace TASI.Backend.Domain.Suppliers.Entities
         public int SupplierId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public decimal ShippingCost { get; set; }
         
         public DateTime ModifiedDate { get; set; }
     }

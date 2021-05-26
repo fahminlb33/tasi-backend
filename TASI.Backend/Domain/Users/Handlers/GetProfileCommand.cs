@@ -1,13 +1,13 @@
-﻿using System.Security.Claims;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TASI.Backend.Domain.Users.Dto;
+using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Infrastructure.Database;
+using TASI.Backend.Infrastructure.Helpers;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Domain.Users.Handlers
@@ -34,15 +34,7 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         public async Task<IActionResult> Handle(GetProfileCommand request, CancellationToken cancellationToken)
         {
-            if (request.UserId == null)
-            {
-                var idFromClaim = _httpContext.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (int.TryParse(idFromClaim, out var id))
-                {
-                    request.UserId = id;
-                }
-            }
-
+            request.UserId ??= _httpContext.GetUserIdFromClaim();
             var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)
             {

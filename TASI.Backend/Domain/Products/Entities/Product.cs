@@ -14,6 +14,8 @@ namespace TASI.Backend.Domain.Products.Entities
         public string Name { get; set; }
         public int Quantity { get; set; }
         public QuantityUnit Unit { get; set; }
+        public decimal Price { get; set; }
+        public double Weight { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
         

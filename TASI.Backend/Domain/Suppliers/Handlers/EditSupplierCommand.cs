@@ -1,8 +1,5 @@
 ﻿#nullable enable
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -45,7 +42,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
             if (request.Body?.Name != null)
             {
-                if (await _context.Suppliers.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower()))
+                if (await _context.Suppliers.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(), cancellationToken))
                 {
                     return new ConflictObjectResult(new ErrorModel("Nama sudah digunakan pada supplier sebelumnya.",
                         ErrorCodes.DataDuplicated));

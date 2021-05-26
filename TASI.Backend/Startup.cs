@@ -76,6 +76,8 @@ namespace TASI.Backend
                 endpoints.MapCustomHealthChecks();
                 endpoints.MapControllers();
             });
+
+            app.UseCustomNotFoundMiddleware();
         }
     }
 }

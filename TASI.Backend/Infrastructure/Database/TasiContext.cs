@@ -15,6 +15,7 @@ namespace TASI.Backend.Infrastructure.Database
         
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderStatusHistory> StatusHistory { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<User> Users { get; set; }
@@ -32,6 +33,9 @@ namespace TASI.Backend.Infrastructure.Database
             SetupGeneratedDates(modelBuilder.Entity<Order>());
             modelBuilder.Entity<Order>()
                 .HasMany(x => x.OrderDetails)
+                .WithOne(x => x.Order);
+            modelBuilder.Entity<Order>()
+                .HasMany(x => x.StatusHistory)
                 .WithOne(x => x.Order);
             modelBuilder.Entity<Order>()
                 .HasOne(x => x.Supplier)

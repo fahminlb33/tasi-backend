@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using TASI.Backend.Domain.Users.Dto;
+using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
 

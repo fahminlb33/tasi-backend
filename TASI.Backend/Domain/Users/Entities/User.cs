@@ -12,6 +12,7 @@ namespace TASI.Backend.Domain.Users.Entities
         public UserRole Role { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public decimal ShippingCost { get; set; }
         
         public DateTime ModifiedDate { get; set; }
     }
