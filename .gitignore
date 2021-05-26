@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # SQLite Database
 *.db
+
+# Exclude appsettings Development
+appsettings.Development.json
