@@ -12,6 +12,7 @@ using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Filters;
 using TASI.Backend.Infrastructure.Registrations;
+using TASI.Backend.Infrastructure.Services;
 
 namespace TASI.Backend
 {
@@ -35,6 +36,10 @@ namespace TASI.Backend
             services.AddDbContext<TasiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.Configure<JwtConfig>(Configuration.GetSection(nameof(JwtConfig)));
+            services.Configure<BingMapsConfig>(Configuration.GetSection(nameof(BingMapsConfig)));
+            services.Configure<DefaultTasiConfig>(Configuration.GetSection(nameof(DefaultTasiConfig)));
+
             services.AddControllers()
                 .AddCustomNewtonsoftJson()
                 .AddCustomValidator();
@@ -43,9 +48,10 @@ namespace TASI.Backend
             services.AddCustomAuth(Configuration);
             services.AddCustomSwagger("TASI Backend API", "v1");
             services.AddCustomHealthChecks(Configuration);
-       
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IAuthorizationEvaluator, CustomAuthorizationEvaluator>();
+            services.AddScoped<IBingMapsService, BingMapsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
