@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -10,8 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TASI.Backend.Domain.Users.Dtos;
+using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
 
@@ -19,7 +22,10 @@ namespace TASI.Backend.Domain.Users.Handlers
 {
     public class LoginCommand : IRequest<IActionResult>
     {
+        [Required]
         public string Username { get; set; }
+
+        [Required]
         public string Password { get; set; }
     }
     
@@ -28,14 +34,14 @@ namespace TASI.Backend.Domain.Users.Handlers
         private readonly ILogger<LoginCommandHandler> _logger;
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _config;
+        private readonly JwtConfig _config;
 
-        public LoginCommandHandler(TasiContext context, IConfiguration config, IMapper mapper, ILogger<LoginCommandHandler> logger)
+        public LoginCommandHandler(TasiContext context, IMapper mapper, ILogger<LoginCommandHandler> logger, IOptions<JwtConfig> config)
         {
             _context = context;
-            _config = config;
             _mapper = mapper;
             _logger = logger;
+            _config = config.Value;
         }
 
         public async Task<IActionResult> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -48,11 +54,11 @@ namespace TASI.Backend.Domain.Users.Handlers
                 return new UnauthorizedObjectResult(new ErrorModel(ErrorMessages.Unauthorized, ErrorCodes.Unauthorized));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:EncryptionKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.EncryptionKey));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = _config["JWT:Issuer"],
-                Audience = _config["JWT:Audience"],
+                Issuer = _config.Issuer,
+                Audience = _config.Audience,
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature),
                 Subject = new ClaimsIdentity(new[]

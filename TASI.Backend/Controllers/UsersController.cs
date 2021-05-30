@@ -28,7 +28,7 @@ namespace TASI.Backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand model)
         {
             try
