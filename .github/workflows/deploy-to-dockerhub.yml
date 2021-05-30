@@ -22,7 +22,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./TASI.Backend
+          file: ./TASI.Backend/Dockerfile
           push: true
           tags: fahminlb33/tasi-backend:latest
       - name: Image digest
