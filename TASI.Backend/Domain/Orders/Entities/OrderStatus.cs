@@ -6,7 +6,6 @@
         InProcess,
         Delivery,
         Completed,
-        Cancelled,
-        Failed
+        Cancelled
     }
 }
