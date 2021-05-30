@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -46,6 +44,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 return new NotFoundObjectResult(new ErrorModel("Order tidak ditemukan", ErrorCodes.NotFound));
             }
 
+            _logger.LogDebug("Transitioning order status for order ID {0}", request.OrderId);
             return request.Body.Code switch
             {
                 OrderStatusCode.Requested => GetInvalidSequentialProcessResponse(),
@@ -62,6 +61,18 @@ namespace TASI.Backend.Domain.Orders.Handlers
         {
             return new ConflictObjectResult(new ErrorModel("Tidak bisa menggunakan status ini karena status sebelumnya tidak valid",
                 ErrorCodes.InvalidSequentialProcess));
+        }
+
+        private async Task UpdateOrder(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
+        {
+            // append status
+            var status = _mapper.Map<OrderStatus>(request.Body);
+            status.Order = order;
+
+            order.StatusHistory.Add(status);
+            _context.Orders.Update(order);
+
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         private async Task<IActionResult> TransitionToInProcess(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
@@ -94,14 +105,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 }
             }
 
-            // append status
-            var status = _mapper.Map<OrderStatus>(request.Body);
-            status.Order = order;
-
-            order.StatusHistory.Add(status);
-            _context.Orders.Update(order);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            // update order
+            await UpdateOrder(request, order, cancellationToken);
             return new OkResult();
         }
 
@@ -113,14 +118,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 return GetInvalidSequentialProcessResponse();
             }
 
-            // append status
-            var status = _mapper.Map<OrderStatus>(request.Body);
-            status.Order = order;
-
-            order.StatusHistory.Add(status);
-            _context.Orders.Update(order);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            // update order
+            await UpdateOrder(request, order, cancellationToken);
             return new OkResult();
         }
 
@@ -144,14 +143,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 }
             }
 
-            // append status
-            var status = _mapper.Map<OrderStatus>(request.Body);
-            status.Order = order;
-
-            order.StatusHistory.Add(status);
-            _context.Orders.Update(order);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            // update order
+            await UpdateOrder(request, order, cancellationToken);
             return new OkResult();
         }
 
@@ -174,14 +167,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 _context.Products.Update(product);
             }
 
-            // append status
-            var status = _mapper.Map<OrderStatus>(request.Body);
-            status.Order = order;
-
-            order.StatusHistory.Add(status);
-            _context.Orders.Update(order);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            // update order
+            await UpdateOrder(request, order, cancellationToken);
             return new OkResult();
         }
     }
