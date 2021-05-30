@@ -18,7 +18,7 @@ namespace TASI.Backend.Infrastructure.Services
         Task<double> CalculateDistance(double sourceLatitude, double sourceLongitude, double destinationLatitude,
             double destinationLongitude, CancellationToken cancellationToken);
 
-        Task<ReverseGeocodeDto> ReverseGeocode(string address, CancellationToken cancellationToken);
+        Task<ReverseGeocodedAddress> ReverseGeocode(string address, CancellationToken cancellationToken);
 
         bool IsPointDifferent(double latitude1, double longitude1, double latitude2, double longitude2,
             double tolerance = 0.001);
@@ -56,7 +56,7 @@ namespace TASI.Backend.Infrastructure.Services
             return tokenRoot["resourceSets"]?.First()["resources"]?.First()["results"]?.First()["travelDistance"]?.ToObject<double>() ?? -1;
         }
 
-        public async Task<ReverseGeocodeDto> ReverseGeocode(string address, CancellationToken cancellationToken)
+        public async Task<ReverseGeocodedAddress> ReverseGeocode(string address, CancellationToken cancellationToken)
         {
             var queries = new Dictionary<string, string>
             {
@@ -72,12 +72,12 @@ namespace TASI.Backend.Infrastructure.Services
             var entry = tokenRoot["resourceSets"]?.First()["resources"]?.FirstOrDefault();
             if (entry == null)
             {
-                return new ReverseGeocodeDto(false, "", "", 0, 0);
+                return new ReverseGeocodedAddress(false, "", "", 0, 0);
             }
 
             var coordinates = entry["point"]?["coordinates"]?.ToObject<double[]>();
             Debug.Assert(coordinates != null, nameof(coordinates) + " != null");
-            return new ReverseGeocodeDto(true, address, entry?["name"]?.Value<string>(), coordinates[0], coordinates[1]);
+            return new ReverseGeocodedAddress(true, address, entry?["name"]?.Value<string>(), coordinates[0], coordinates[1]);
         }
 
         public bool IsPointDifferent(double latitude1, double longitude1, double latitude2, double longitude2, double tolerance = 0.001)
