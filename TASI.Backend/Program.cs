@@ -58,7 +58,6 @@ namespace TASI.Backend
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    //webBuilder.UseIIS();
                 });
         }
 
