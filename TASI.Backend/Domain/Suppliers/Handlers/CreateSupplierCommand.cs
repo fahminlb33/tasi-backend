@@ -26,10 +26,10 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
         public string Address { get; set; }
 
         [Required]
-        public long Latitude { get; set; }
+        public double Latitude { get; set; }
 
         [Required]
-        public long Longitude { get; set; }
+        public double Longitude { get; set; }
     }
 
     public class CreateSupplierCommandHandler : IRequestHandler<CreateSupplierCommand, IActionResult>

@@ -17,7 +17,7 @@ namespace TASI.Backend.Domain.Products.Entities
         public decimal Price { get; set; }
         public double Weight { get; set; }
 
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        //public ICollection<OrderDetail> OrderDetails { get; set; }
         
         public DateTime ModifiedDate { get; set; }
     }
