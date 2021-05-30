@@ -41,6 +41,7 @@ namespace TASI.Backend
             services.Configure<BingMapsConfig>(Configuration.GetSection(nameof(BingMapsConfig)));
             services.Configure<DefaultTasiConfig>(Configuration.GetSection(nameof(DefaultTasiConfig)));
 
+            services.AddApplicationInsightsTelemetry();
             services.AddControllers()
                 .AddCustomNewtonsoftJson()
                 .AddCustomValidator();

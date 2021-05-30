@@ -1,10 +1,11 @@
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
 using TASI.Backend.Infrastructure.Database;
 
 namespace TASI.Backend
@@ -13,34 +14,35 @@ namespace TASI.Backend
     {
         public static int Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Debug)
-                .Enrich.FromLogContext()
-                .Enrich.WithMachineName()
-                .WriteTo.Console()
-                .WriteTo.Seq("http://localhost:5341/")
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+                .Build();
+
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
+
+            Log.Logger = logger;
 
             try
             {
-                Log.Logger.Information("Building web host");
+                logger.Information("Building web host");
                 var host = CreateHostBuilder(args).Build();
 
-                Log.Logger.Information("Seeding database if not exists");
+                logger.Information("Seeding database if not exists");
                 CreateDbIfNotExists(host);
 
-                Log.Logger.Information("Starting web host");
+                logger.Information("Starting web host");
                 host.Run();
 
-                Log.Logger.Information("Web host shutdown gracefully");
+                logger.Information("Web host shutdown gracefully");
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Logger.Fatal(ex, "Host unexpectedly terminated");
+                logger.Fatal(ex, "Host unexpectedly terminated");
                 return -1;
             }
             finally
