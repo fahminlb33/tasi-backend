@@ -38,12 +38,10 @@ namespace TASI.Backend.Infrastructure.Database
                 .WithOne(x => x.Order);
             modelBuilder.Entity<Order>()
                 .HasOne(x => x.Supplier)
-                .WithOne()
-                .HasForeignKey<Order>(x => x.SupplierId);
+                .WithMany();
             modelBuilder.Entity<Order>()
                 .HasOne(x => x.PicUser)
-                .WithOne()
-                .HasForeignKey<Order>(x => x.PicUserId);
+                .WithMany();
             
             SetupGeneratedDates(modelBuilder.Entity<Supplier>());
             modelBuilder.Entity<Supplier>()
