@@ -1,9 +1,7 @@
 ﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using TASI.Backend.Infrastructure.Database;
@@ -12,22 +10,21 @@ namespace TASI.Backend.Infrastructure.Registrations
 {
     public static class HealthChecksRegistration
     {
-        public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services)
         {
             services.AddHealthChecks()
                 .AddCheck("backend", () => HealthCheckResult.Healthy())
                 .AddDbContextCheck<TasiContext>("data-context");
-                //.AddSqlite(config.GetConnectionString("DefaultConnection"), name: "sqlite");
 
                 services.AddHealthChecksUI(settings =>
                 {
                     settings.AddHealthCheckEndpoint("main", "/health");
-                }).AddInMemoryStorage(); //.AddSqliteStorage(config.GetConnectionString("HealthChecksConnection"));
+                }).AddInMemoryStorage();
 
             return services;
         }
 
-        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
         {
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
@@ -38,7 +35,6 @@ namespace TASI.Backend.Infrastructure.Registrations
             {
                 options.ApiPath = "/health-api";
                 options.UIPath = "/health-ui";
-                //options.AddCustomStylesheet($"{env.ContentRootPath}/Infrastrcuture")
             });
 
             return app;

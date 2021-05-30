@@ -26,7 +26,7 @@ namespace TASI.Backend.Domain.Products.Handlers
 
         public async Task<IActionResult> Handle(GetProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products.FindAsync(request.ProductId);
+            var product = await _context.Products.FindAsync(new object[] {request.ProductId}, cancellationToken);
             if (product == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));

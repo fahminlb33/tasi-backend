@@ -26,7 +26,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
 
         public async Task<IActionResult> Handle(GetSupplierCommand request, CancellationToken cancellationToken)
         {
-            var supplier = await _context.Suppliers.FindAsync(request.SupplierId);
+            var supplier = await _context.Suppliers.FindAsync(new object[] {request.SupplierId}, cancellationToken);
             if (supplier == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));

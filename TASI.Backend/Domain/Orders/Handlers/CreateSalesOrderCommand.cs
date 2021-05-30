@@ -48,14 +48,14 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public async Task<IActionResult> Handle(CreateSalesOrderCommand request, CancellationToken cancellationToken)
         {
             User picUser;
-            var loggedUser = await _context.Users.FindAsync(_httpContext.GetUserIdFromClaim());
+            var loggedUser = await _context.Users.FindAsync(new object[] {_httpContext.GetUserIdFromClaim()}, cancellationToken);
             if (loggedUser.Role == UserRole.Customer)
             {
                 picUser = loggedUser;
             }
             else
             {
-                var user = await _context.Users.FindAsync(request.UserId);
+                var user = await _context.Users.FindAsync(new object[] {request.UserId}, cancellationToken);
                 if (user == null)
                 {
                     return new NotFoundObjectResult(new ErrorModel("User tidak ditemukan", ErrorCodes.NotFound));
@@ -63,9 +63,9 @@ namespace TASI.Backend.Domain.Orders.Handlers
 
                 picUser = user;
             }
-            
 
-            var supplier = await _context.Suppliers.FindAsync(1); // const for self supplier
+
+            var supplier = await _context.Suppliers.FindAsync(new object[] {1}, cancellationToken); // const for self supplier
             var order = new Order
             {
                 Supplier = supplier,

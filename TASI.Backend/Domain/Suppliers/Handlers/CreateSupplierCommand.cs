@@ -67,7 +67,8 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Created supplier {0} with ID {1}", supplier.Name, supplier.SupplierId);
-            return new JsonResult(await _context.Suppliers.FindAsync(supplier.SupplierId));
+            return new JsonResult(
+                await _context.Suppliers.FindAsync(new object[] {supplier.SupplierId}, cancellationToken));
 
         }
     }

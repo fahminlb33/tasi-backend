@@ -56,8 +56,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
                     request.Body.Code))
             };
         }
-
-        private IActionResult GetInvalidSequentialProcessResponse()
+        
+        private static IActionResult GetInvalidSequentialProcessResponse()
         {
             return new ConflictObjectResult(new ErrorModel("Tidak bisa menggunakan status ini karena status sebelumnya tidak valid",
                 ErrorCodes.InvalidSequentialProcess));
@@ -98,7 +98,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             {
                 foreach (var orderDetail in order.OrderDetails)
                 {
-                    var product = await _context.Products.FindAsync(orderDetail.Product.ProductId);
+                    var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId}, cancellationToken);
                     product.Quantity -= orderDetail.Quantity;
 
                     _context.Products.Update(product);
@@ -136,7 +136,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             {
                 foreach (var orderDetail in order.OrderDetails)
                 {
-                    var product = await _context.Products.FindAsync(orderDetail.Product.ProductId);
+                    var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId},
+                        cancellationToken);
                     product.Quantity += orderDetail.Quantity;
 
                     _context.Products.Update(product);
@@ -159,7 +160,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             // update stock
             foreach (var orderDetail in order.OrderDetails)
             {
-                var product = await _context.Products.FindAsync(orderDetail.Product.ProductId);
+                var product = await _context.Products.FindAsync(new object[]{orderDetail.Product.ProductId}, cancellationToken);
                 product.Quantity = order.Type == OrderType.Sales
                     ? product.Quantity + orderDetail.Quantity
                     : product.Quantity - orderDetail.Quantity;

@@ -29,11 +29,6 @@ namespace TASI.Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.Configure<IISServerOptions>(options =>
-            //{
-            //    options.AutomaticAuthentication = false;
-            //});
-
             services.AddOptions();
             services.AddMemoryCache();
             services.AddAutoMapper(typeof(UserDomainMapperProfile));
@@ -54,7 +49,7 @@ namespace TASI.Backend
             services.AddCustomCors();
             services.AddCustomAuth(Configuration);
             services.AddCustomSwagger("TASI Backend API", "v1");
-            services.AddCustomHealthChecks(Configuration);
+            services.AddCustomHealthChecks();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IAuthorizationEvaluator, CustomAuthorizationEvaluator>();
@@ -77,7 +72,7 @@ namespace TASI.Backend
             app.UseCustomSerilog();
 
             app.UseCustomSwagger("TASI Backend API", "v1");
-            app.UseCustomHealthChecks(env);
+            app.UseCustomHealthChecks();
             app.UseCustomResponseWrapper(env);
 
             app.UseRouting();

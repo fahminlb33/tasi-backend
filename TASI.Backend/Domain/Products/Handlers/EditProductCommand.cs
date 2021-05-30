@@ -32,7 +32,7 @@ namespace TASI.Backend.Domain.Products.Handlers
 
         public async Task<IActionResult> Handle(EditProductCommand request, CancellationToken cancellationToken)
         {
-            var supplier = await _context.Products.FindAsync(request.ProductId);
+            var supplier = await _context.Products.FindAsync(new object[] { request.ProductId }, cancellationToken);
             if (supplier == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
