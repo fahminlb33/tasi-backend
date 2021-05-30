@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["TASI.Backend/TASI.Backend.csproj", "TASI.Backend/"]
+COPY ["TASI.Backend.csproj", "TASI.Backend/"]
 RUN dotnet restore "TASI.Backend/TASI.Backend.csproj"
 COPY . .
 WORKDIR "/src/TASI.Backend"
