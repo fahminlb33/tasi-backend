@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.NetworkInformation;
-using HealthChecks.UI.Client;
+﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -18,13 +16,13 @@ namespace TASI.Backend.Infrastructure.Registrations
         {
             services.AddHealthChecks()
                 .AddCheck("backend", () => HealthCheckResult.Healthy())
-                .AddDbContextCheck<TasiContext>("data-context")
-                .AddSqlite(config.GetConnectionString("DefaultConnection"), name: "sqlite");
-            
-            services.AddHealthChecksUI(settings =>
+                .AddDbContextCheck<TasiContext>("data-context");
+                //.AddSqlite(config.GetConnectionString("DefaultConnection"), name: "sqlite");
+
+                services.AddHealthChecksUI(settings =>
                 {
                     settings.AddHealthCheckEndpoint("main", "/health");
-                }).AddSqliteStorage(config.GetConnectionString("HealthChecksConnection"));
+                }).AddInMemoryStorage(); //.AddSqliteStorage(config.GetConnectionString("HealthChecksConnection"));
 
             return services;
         }
