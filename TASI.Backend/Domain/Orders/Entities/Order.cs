@@ -11,7 +11,7 @@ namespace TASI.Backend.Domain.Orders.Entities
     {
         [Key]
         public int OrderId { get; set; }
-
+        public OrderType Type { get; set; }
         public double TotalWeight { get; set; }
         public decimal TotalSales { get; set; }
         public decimal TotalShipping { get; set; }

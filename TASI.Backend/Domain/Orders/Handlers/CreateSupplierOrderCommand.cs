@@ -87,6 +87,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 }
             };
 
+            order.Type = OrderType.Supplier;
             order.StatusHistory = orderStatusHistory;
             order.OrderDetails = orderDetails;
             order.TotalSales = orderDetails.Sum(x => x.TotalPrice);
