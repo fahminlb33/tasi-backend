@@ -13,21 +13,26 @@ namespace TASI.Backend.Infrastructure.Database
         {
         }
         
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<OrderStatusHistory> StatusHistory { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<User> Users { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderStatus> OrderStatus { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(x => x.Product);
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(x => x.Order);
-                //.WithMany(x => x.OrderDetails);
+            SetupGeneratedDates(modelBuilder.Entity<User>());
+
+            SetupGeneratedDates(modelBuilder.Entity<Product>());
+            modelBuilder.Entity<Product>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+                
+            SetupGeneratedDates(modelBuilder.Entity<Supplier>());
+            modelBuilder.Entity<Supplier>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
 
             SetupGeneratedDates(modelBuilder.Entity<Order>());
             modelBuilder.Entity<Order>()
@@ -43,15 +48,13 @@ namespace TASI.Backend.Infrastructure.Database
                 .HasOne(x => x.PicUser)
                 .WithMany();
             
-            SetupGeneratedDates(modelBuilder.Entity<Supplier>());
-            modelBuilder.Entity<Supplier>()
-                .HasIndex(x => x.Name)
-                .IsUnique();
+            SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(x => x.Product);
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(x => x.Order);
 
-            SetupGeneratedDates(modelBuilder.Entity<Product>());
-            modelBuilder.Entity<Product>()
-                .HasIndex(x => x.Name)
-                .IsUnique();
+            SetupGeneratedDates(modelBuilder.Entity<OrderStatus>());
         }
 
         private void SetupGeneratedDates<T>(EntityTypeBuilder<T> entity) where T : class, IDaoEntity

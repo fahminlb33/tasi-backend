@@ -6,7 +6,7 @@ namespace TASI.Backend.Domain.Orders.Dto
     public class ProcessOrderDto
     {
         [Required]
-        public OrderStatus Code { get; set; }
+        public OrderStatusCode Code { get; set; }
 
         [Required]
         [StringLength(200, MinimumLength = 5)]

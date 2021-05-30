@@ -48,11 +48,11 @@ namespace TASI.Backend.Domain.Orders.Handlers
 
             return request.Body.Code switch
             {
-                OrderStatus.Requested => GetInvalidSequentialProcessResponse(),
-                OrderStatus.InProcess => await TransitionToInProcess(request, order, cancellationToken),
-                OrderStatus.Delivery => await TransitionToDelivery(request, order, cancellationToken),
-                OrderStatus.Completed => await TransitionToCompleted(request, order, cancellationToken),
-                OrderStatus.Cancelled => await TransitionToCancelled(request, order, cancellationToken),
+                OrderStatusCode.Requested => GetInvalidSequentialProcessResponse(),
+                OrderStatusCode.InProcess => await TransitionToInProcess(request, order, cancellationToken),
+                OrderStatusCode.Delivery => await TransitionToDelivery(request, order, cancellationToken),
+                OrderStatusCode.Completed => await TransitionToCompleted(request, order, cancellationToken),
+                OrderStatusCode.Cancelled => await TransitionToCancelled(request, order, cancellationToken),
                 _ => new BadRequestObjectResult(new ErrorModel("Status tidak diketahui", ErrorCodes.ModelValidation,
                     request.Body.Code))
             };
@@ -67,7 +67,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private async Task<IActionResult> TransitionToInProcess(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code != OrderStatus.Requested)
+            if (latestStatus.Code != OrderStatusCode.Requested)
             {
                 return GetInvalidSequentialProcessResponse();
             }
@@ -95,7 +95,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             }
 
             // append status
-            var status = _mapper.Map<OrderStatusHistory>(request.Body);
+            var status = _mapper.Map<OrderStatus>(request.Body);
             status.Order = order;
 
             order.StatusHistory.Add(status);
@@ -108,13 +108,13 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private async Task<IActionResult> TransitionToDelivery(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code != OrderStatus.InProcess)
+            if (latestStatus.Code != OrderStatusCode.InProcess)
             {
                 return GetInvalidSequentialProcessResponse();
             }
 
             // append status
-            var status = _mapper.Map<OrderStatusHistory>(request.Body);
+            var status = _mapper.Map<OrderStatus>(request.Body);
             status.Order = order;
 
             order.StatusHistory.Add(status);
@@ -127,7 +127,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private async Task<IActionResult> TransitionToCompleted(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code != OrderStatus.Delivery)
+            if (latestStatus.Code != OrderStatusCode.Delivery)
             {
                 return GetInvalidSequentialProcessResponse();
             }
@@ -145,7 +145,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             }
 
             // append status
-            var status = _mapper.Map<OrderStatusHistory>(request.Body);
+            var status = _mapper.Map<OrderStatus>(request.Body);
             status.Order = order;
 
             order.StatusHistory.Add(status);
@@ -158,7 +158,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private async Task<IActionResult> TransitionToCancelled(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code != OrderStatus.InProcess)
+            if (latestStatus.Code != OrderStatusCode.InProcess)
             {
                 return GetInvalidSequentialProcessResponse();
             }
@@ -175,7 +175,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             }
 
             // append status
-            var status = _mapper.Map<OrderStatusHistory>(request.Body);
+            var status = _mapper.Map<OrderStatus>(request.Body);
             status.Order = order;
 
             order.StatusHistory.Add(status);

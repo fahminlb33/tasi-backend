@@ -68,11 +68,11 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 };
             }));
 
-            var orderStatusHistory = new List<OrderStatusHistory>
+            var orderStatusHistory = new List<OrderStatus>
             {
                 new()
                 {
-                    Code = OrderStatus.Requested,
+                    Code = OrderStatusCode.Requested,
                     Message = "Pesanan disimpan dan menunggu diproses.",
                     Order = order
                 }

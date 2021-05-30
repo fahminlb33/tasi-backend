@@ -25,7 +25,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public int Page { get; set; } = 0;
         public int Limit { get; set; } = 10;
         public OrderType? Type { get; set; }
-        public OrderStatus? Status { get; set; }
+        public OrderStatusCode? Status { get; set; }
         public DateTime? StartDate { get;set; }
         public DateTime? EndDate { get;set; }
         public int? SupplierId { get; set; }

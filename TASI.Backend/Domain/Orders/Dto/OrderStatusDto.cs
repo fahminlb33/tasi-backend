@@ -5,13 +5,13 @@ using TASI.Backend.Domain.Orders.Entities;
 
 namespace TASI.Backend.Domain.Orders.Dto
 {
-    public class OrderStatusHistoryDto
+    public class OrderStatusDto
     {
         public int OrderStatusHistoryId { get; set; }
         public string Message { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public OrderStatus Code { get; set; }
+        public OrderStatusCode Code { get; set; }
 
         public DateTime ModifiedDate { get; set; }
     }

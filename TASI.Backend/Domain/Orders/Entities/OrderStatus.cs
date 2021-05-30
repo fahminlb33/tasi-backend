@@ -1,11 +1,17 @@
-﻿namespace TASI.Backend.Domain.Orders.Entities
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using TASI.Backend.Infrastructure.Database;
+
+namespace TASI.Backend.Domain.Orders.Entities
 {
-    public enum OrderStatus
+    public class OrderStatus : IDaoEntity
     {
-        Requested,
-        InProcess,
-        Delivery,
-        Completed,
-        Cancelled
+        [Key]
+        public int OrderStatusHistoryId { get; set; }
+        public OrderStatusCode Code { get; set; }
+        public string Message { get; set; }
+        public Order Order { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
     }
 }

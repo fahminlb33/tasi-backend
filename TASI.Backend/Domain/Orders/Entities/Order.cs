@@ -21,7 +21,7 @@ namespace TASI.Backend.Domain.Orders.Entities
         public User PicUser { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
-        public ICollection<OrderStatusHistory> StatusHistory { get; set; }
+        public ICollection<OrderStatus> StatusHistory { get; set; }
         
         public DateTime ModifiedDate { get; set; }
     }

@@ -23,7 +23,7 @@ namespace TASI.Backend.Domain.Orders.Dto
         public Supplier Supplier { get; set; }
         public UserProfileDto PicUser { get; set; }
         public IEnumerable<OrderDetailDto> OrderDetails { get; set; }
-        public IEnumerable<OrderStatusHistoryDto> StatusHistory { get; set; }
+        public IEnumerable<OrderStatusDto> StatusHistory { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
 
