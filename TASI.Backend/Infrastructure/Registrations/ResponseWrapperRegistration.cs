@@ -18,7 +18,7 @@ namespace TASI.Backend.Infrastructure.Registrations
             app.UseApiResponseAndExceptionWrapper<MapResponseObject>(new AutoWrapperOptions
             {
                 IsDebug = env.IsDevelopment(),
-                UseApiProblemDetailsException = env.IsDevelopment()
+                UseApiProblemDetailsException = true
             });
         }
     }
