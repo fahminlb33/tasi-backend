@@ -3,7 +3,7 @@ using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Domain.Users.Entities;
 using TASI.Backend.Domain.Users.Handlers;
 
-namespace TASI.Backend.Infrastructure.Configs
+namespace TASI.Backend.Domain.Users.Mappers
 {
     public class UserDomainMapperProfile : Profile
     {

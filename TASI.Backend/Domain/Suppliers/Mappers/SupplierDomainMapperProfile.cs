@@ -2,10 +2,8 @@
 using TASI.Backend.Domain.Suppliers.Dtos;
 using TASI.Backend.Domain.Suppliers.Entities;
 using TASI.Backend.Domain.Suppliers.Handlers;
-using TASI.Backend.Domain.Users.Entities;
-using TASI.Backend.Domain.Users.Handlers;
 
-namespace TASI.Backend.Infrastructure.Configs
+namespace TASI.Backend.Domain.Suppliers.Mappers
 {
     public class SupplierDomainMapperProfile : Profile
     {

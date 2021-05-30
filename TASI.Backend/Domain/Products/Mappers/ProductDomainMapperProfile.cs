@@ -3,7 +3,7 @@ using TASI.Backend.Domain.Products.Dtos;
 using TASI.Backend.Domain.Products.Entities;
 using TASI.Backend.Domain.Products.Handlers;
 
-namespace TASI.Backend.Infrastructure.Configs
+namespace TASI.Backend.Domain.Products.Mappers
 {
     public class ProductDomainMapperProfile : Profile
     {
