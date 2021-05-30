@@ -42,12 +42,12 @@ namespace TASI.Backend.Controllers
             }
         }
 
-        [HttpGet("reverseGeocode")]
-        public async Task<IActionResult> ReverseGeocode([FromQuery, Required] string address)
+        [HttpGet("lookup")]
+        public async Task<IActionResult> LookupAddress([FromQuery, Required] string address)
         {
             try
             {
-                return await _mediator.Send(new ReverseGeocodeCommand
+                return await _mediator.Send(new LookupAddressCommand
                 {
                     Address = address
                 });

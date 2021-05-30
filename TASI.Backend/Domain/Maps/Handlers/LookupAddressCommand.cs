@@ -9,24 +9,24 @@ using TASI.Backend.Infrastructure.Services;
 
 namespace TASI.Backend.Domain.Maps.Handlers
 {
-    public class ReverseGeocodeCommand : IRequest<IActionResult>
+    public class LookupAddressCommand : IRequest<IActionResult>
     {
         [Required]
         public string Address { get; set; }
     }
 
-    public class ReverseGeocodeCommandHandler : IRequestHandler<ReverseGeocodeCommand, IActionResult>
+    public class LookupAddressCommandHandler : IRequestHandler<LookupAddressCommand, IActionResult>
     {
-        private readonly ILogger<ReverseGeocodeCommandHandler> _logger;
+        private readonly ILogger<LookupAddressCommandHandler> _logger;
         private readonly IBingMapsService _bing;
 
-        public ReverseGeocodeCommandHandler(ILogger<ReverseGeocodeCommandHandler> logger, IBingMapsService bing)
+        public LookupAddressCommandHandler(ILogger<LookupAddressCommandHandler> logger, IBingMapsService bing)
         {
             _logger = logger;
             _bing = bing;
         }
 
-        public async Task<IActionResult> Handle(ReverseGeocodeCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(LookupAddressCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Reverse geocoding location {0}...", request.Address);
             var result = await _bing.ReverseGeocode(request.Address, cancellationToken);
