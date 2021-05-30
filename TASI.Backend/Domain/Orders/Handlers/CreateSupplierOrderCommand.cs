@@ -23,21 +23,32 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public int SupplierId { get; set; }
 
         [Required]
-        public List<OrderDetailDto> Products { get; set; }
+        public List<CreateSupplierCommandProductsDto> Products { get; set; }
+    }
+
+    public class CreateSupplierCommandProductsDto
+    {
+        [Required]
+        public int ProductId { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
     }
 
     public class CreateSupplierOrderCommandHandler : IRequestHandler<CreateSupplierOrderCommand, IActionResult>
     {
         private readonly ILogger<CreateSupplierOrderCommandHandler> _logger;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IMapper _mapper;
         private readonly TasiContext _context;
         private readonly DefaultTasiConfig _config;
 
-        public CreateSupplierOrderCommandHandler(ILogger<CreateSupplierOrderCommandHandler> logger, TasiContext context, IHttpContextAccessor httpContext, IOptions<DefaultTasiConfig> config)
+        public CreateSupplierOrderCommandHandler(ILogger<CreateSupplierOrderCommandHandler> logger, TasiContext context, IHttpContextAccessor httpContext, IOptions<DefaultTasiConfig> config, IMapper mapper)
         {
             _logger = logger;
             _context = context;
             _httpContext = httpContext;
+            _mapper = mapper;
             _config = config.Value;
         }
 
@@ -47,9 +58,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             var supplier = await _context.Suppliers.FindAsync(request.SupplierId);
             var order = new Order
             {
-                SupplierId = supplier.SupplierId,
                 Supplier =  supplier,
-                PicUserId = user.UserId,
                 PicUser = user
             };
 
@@ -89,7 +98,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             await _context.Orders.AddAsync(order, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new JsonResult(order);
+            _logger.LogInformation("Created order with ID {0}", order.OrderId);
+            return new JsonResult(_mapper.Map<OrderDto>(order));
         }
     }
 }
