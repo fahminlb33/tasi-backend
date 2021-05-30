@@ -58,14 +58,23 @@ namespace TASI.Backend.Infrastructure.Database
                     Longitude = 107.594
                 });
 
-            context.Suppliers.Add(new Supplier
-            {
-                Name = "PT Mata Air Dunia",
-                Address = "Bukit Sakinah Barengkok, Leuwiliang, 16640",
-                Latitude = -6.6028126,
-                Longitude = 106.6409201,
-                ShippingCost = 918153,
-            });
+            context.Suppliers.AddRange(
+                new Supplier
+                {
+                    Name = "PT Air Prima",
+                    Address = "Kp Sawah Baru Barengkok",
+                    Latitude = -6.9021,
+                    Longitude = 107.594,
+                    ShippingCost = 0,
+                },
+                new Supplier
+                {
+                    Name = "PT Mata Air Dunia",
+                    Address = "Bukit Sakinah Barengkok, Leuwiliang, 16640",
+                    Latitude = -6.6028126,
+                    Longitude = 106.6409201,
+                    ShippingCost = 918153,
+                });
 
             context.Products.Add(new Product
             {
