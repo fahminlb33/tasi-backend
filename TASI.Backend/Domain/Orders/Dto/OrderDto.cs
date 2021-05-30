@@ -26,4 +26,19 @@ namespace TASI.Backend.Domain.Orders.Dto
         public IEnumerable<OrderStatusHistoryDto> StatusHistory { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
+
+    public class SimpleOrderDto
+    {
+        public int OrderId { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public OrderType Type { get; set; }
+        
+        public double TotalWeight { get; set; }
+        public decimal TotalSales { get; set; }
+        public decimal TotalShipping { get; set; }
+        public decimal TotalTax { get; set; }
+        public decimal SubTotal { get; set; }
+        public DateTime ModifiedDate { get; set; }
+    }
 }

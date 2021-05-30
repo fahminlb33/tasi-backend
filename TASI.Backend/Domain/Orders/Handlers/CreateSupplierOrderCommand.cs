@@ -23,16 +23,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public int SupplierId { get; set; }
 
         [Required]
-        public List<CreateSupplierCommandProductsDto> Products { get; set; }
-    }
-
-    public class CreateSupplierCommandProductsDto
-    {
-        [Required]
-        public int ProductId { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
+        public List<OrderCommandProductDto> Products { get; set; }
     }
 
     public class CreateSupplierOrderCommandHandler : IRequestHandler<CreateSupplierOrderCommand, IActionResult>
@@ -92,7 +83,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             order.OrderDetails = orderDetails;
             order.TotalSales = orderDetails.Sum(x => x.TotalPrice);
             order.TotalWeight = orderDetails.Sum(x => x.TotalWeight);
-            order.TotalShipping = supplier.ShippingCost * (decimal) order.TotalWeight;
+            order.TotalShipping = supplier.ShippingCost * (decimal) order.TotalWeight; // shipping from supplier
             order.TotalTax = order.TotalSales * _config.TaxRate;
             order.SubTotal = order.TotalSales + order.TotalShipping + order.TotalTax;
 

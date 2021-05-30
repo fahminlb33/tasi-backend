@@ -11,6 +11,7 @@ namespace TASI.Backend.Domain.Orders.Mappers
             CreateMap<OrderDetail, OrderDetailDto>();
             CreateMap<OrderStatusHistory, OrderStatusHistoryDto>();
             CreateMap<Order, OrderDto>();
+            CreateMap<Order, SimpleOrderDto>();
         }
     }
 }

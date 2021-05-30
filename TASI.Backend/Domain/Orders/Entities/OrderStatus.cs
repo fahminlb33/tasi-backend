@@ -4,6 +4,7 @@
     {
         Requested,
         InProcess,
+        Delivery,
         Completed,
         Cancelled,
         Failed
