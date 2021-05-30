@@ -8,15 +8,16 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TASI.Backend.Domain.Orders.Dto;
 using TASI.Backend.Domain.Orders.Entities;
+using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Helpers;
 
 namespace TASI.Backend.Domain.Orders.Handlers
 {
-    public class 
-        CreateSupplierOrderCommand : IRequest<IActionResult>
+    public class CreateSupplierOrderCommand : IRequest<IActionResult>
     {
         [Required]
         public int SupplierId { get; set; }
@@ -30,14 +31,14 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private readonly ILogger<CreateSupplierOrderCommandHandler> _logger;
         private readonly IHttpContextAccessor _httpContext;
         private readonly TasiContext _context;
-        private readonly IMapper _mapper;
+        private readonly DefaultTasiConfig _config;
 
-        public CreateSupplierOrderCommandHandler(ILogger<CreateSupplierOrderCommandHandler> logger, TasiContext context, IMapper mapper, IHttpContextAccessor httpContext)
+        public CreateSupplierOrderCommandHandler(ILogger<CreateSupplierOrderCommandHandler> logger, TasiContext context, IHttpContextAccessor httpContext, IOptions<DefaultTasiConfig> config)
         {
             _logger = logger;
             _context = context;
-            _mapper = mapper;
             _httpContext = httpContext;
+            _config = config.Value;
         }
 
         public async Task<IActionResult> Handle(CreateSupplierOrderCommand request, CancellationToken cancellationToken)
@@ -82,7 +83,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             order.TotalSales = orderDetails.Sum(x => x.TotalPrice);
             order.TotalWeight = orderDetails.Sum(x => x.TotalWeight);
             order.TotalShipping = supplier.ShippingCost * (decimal) order.TotalWeight;
-            order.TotalTax = order.TotalSales * 0.10M;
+            order.TotalTax = order.TotalSales * _config.TaxRate;
             order.SubTotal = order.TotalSales + order.TotalShipping + order.TotalTax;
 
             await _context.Orders.AddAsync(order, cancellationToken);
