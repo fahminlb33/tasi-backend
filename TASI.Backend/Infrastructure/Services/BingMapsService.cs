@@ -37,12 +37,16 @@ namespace TASI.Backend.Infrastructure.Services
             _config = bingConfig.Value;
         }
 
-        public async Task<double> CalculateDistance(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude, CancellationToken cancellationToken)
+        public async Task<double> CalculateDistance(double sourceLatitude, double sourceLongitude,
+            double destinationLatitude, double destinationLongitude, CancellationToken cancellationToken)
         {
             var queries = new Dictionary<string, string>
             {
                 {"origins", $"{sourceLatitude.ToString(USCulture)},{sourceLongitude.ToString(USCulture)}"},
-                {"destinations", $"{destinationLatitude.ToString(USCulture)},{destinationLongitude.ToString(USCulture)}"},
+                {
+                    "destinations",
+                    $"{destinationLatitude.ToString(USCulture)},{destinationLongitude.ToString(USCulture)}"
+                },
                 {"travelMode", "driving"},
                 {"timeUnit", "minute"},
                 {"key", _config.ApiKey}
@@ -53,7 +57,8 @@ namespace TASI.Backend.Infrastructure.Services
             var result = await client.GetAsync(url, cancellationToken);
             result.EnsureSuccessStatusCode();
             var tokenRoot = JToken.Parse(await result.Content.ReadAsStringAsync(cancellationToken));
-            return tokenRoot["resourceSets"]?.First()["resources"]?.First()["results"]?.First()["travelDistance"]?.ToObject<double>() ?? -1;
+            return tokenRoot["resourceSets"]?.First()["resources"]?.First()["results"]?.First()["travelDistance"]
+                ?.ToObject<double>() ?? -1;
         }
 
         public async Task<ReverseGeocodedAddress> ReverseGeocode(string address, CancellationToken cancellationToken)
@@ -77,10 +82,12 @@ namespace TASI.Backend.Infrastructure.Services
 
             var coordinates = entry["point"]?["coordinates"]?.ToObject<double[]>();
             Debug.Assert(coordinates != null, nameof(coordinates) + " != null");
-            return new ReverseGeocodedAddress(true, address, entry?["name"]?.Value<string>(), coordinates[0], coordinates[1]);
+            return new ReverseGeocodedAddress(true, address, entry?["name"]?.Value<string>(), coordinates[0],
+                coordinates[1]);
         }
 
-        public bool IsPointDifferent(double latitude1, double longitude1, double latitude2, double longitude2, double tolerance = 0.001)
+        public bool IsPointDifferent(double latitude1, double longitude1, double latitude2, double longitude2,
+            double tolerance = 0.001)
         {
             return Math.Abs(latitude1 - latitude2) > tolerance || Math.Abs(longitude1 - longitude2) > tolerance;
         }

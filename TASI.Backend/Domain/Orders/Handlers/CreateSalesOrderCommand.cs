@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
@@ -36,7 +35,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public CreateSalesOrderCommandHandler(ILogger<CreateSalesOrderCommandHandler> logger, IMapper mapper, TasiContext context, IOptions<DefaultTasiConfig> config, IHttpContextAccessor httpContext)
+        public CreateSalesOrderCommandHandler(ILogger<CreateSalesOrderCommandHandler> logger, IMapper mapper,
+            TasiContext context, IOptions<DefaultTasiConfig> config, IHttpContextAccessor httpContext)
         {
             _logger = logger;
             _mapper = mapper;
@@ -48,7 +48,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public async Task<IActionResult> Handle(CreateSalesOrderCommand request, CancellationToken cancellationToken)
         {
             User picUser;
-            var loggedUser = await _context.Users.FindAsync(new object[] {_httpContext.GetUserIdFromClaim()}, cancellationToken);
+            var loggedUser =
+                await _context.Users.FindAsync(new object[] {_httpContext.GetUserIdFromClaim()}, cancellationToken);
             if (loggedUser.Role == UserRole.Customer)
             {
                 picUser = loggedUser;
@@ -65,7 +66,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             }
 
 
-            var supplier = await _context.Suppliers.FindAsync(new object[] {1}, cancellationToken); // const for self supplier
+            var supplier =
+                await _context.Suppliers.FindAsync(new object[] {1}, cancellationToken); // const for self supplier
             var order = new Order
             {
                 Supplier = supplier,
@@ -102,7 +104,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             order.OrderDetails = orderDetails;
             order.TotalSales = orderDetails.Sum(x => x.TotalPrice);
             order.TotalWeight = orderDetails.Sum(x => x.TotalWeight);
-            order.TotalShipping = picUser.ShippingCost * (decimal)order.TotalWeight; // shipping to user
+            order.TotalShipping = picUser.ShippingCost * (decimal) order.TotalWeight; // shipping to user
             order.TotalTax = order.TotalSales * _config.TaxRate;
             order.SubTotal = order.TotalSales + order.TotalShipping + order.TotalTax;
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Products.Dtos;
 using TASI.Backend.Domain.Products.Handlers;
@@ -26,7 +26,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("{productId}")]
-        public async Task<IActionResult> Get([FromRoute, Required] int productId)
+        public async Task<IActionResult> Get([FromRoute] [Required]
+            int productId)
         {
             try
             {
@@ -43,7 +44,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetProductsCommand model)
+        public async Task<IActionResult> GetAll([FromQuery]
+            GetProductsCommand model)
         {
             try
             {
@@ -57,7 +59,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateProductCommand model)
+        public async Task<IActionResult> Create([FromBody]
+            CreateProductCommand model)
         {
             try
             {
@@ -71,7 +74,9 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPut("{productId}")]
-        public async Task<IActionResult> Edit([FromRoute, Required] int productId, [FromBody] EditProductDto body)
+        public async Task<IActionResult> Edit([FromRoute] [Required]
+            int productId, [FromBody]
+            EditProductDto body)
         {
             try
             {
@@ -89,7 +94,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpDelete("{productId}")]
-        public async Task<IActionResult> Delete([FromRoute, Required] int productId)
+        public async Task<IActionResult> Delete([FromRoute] [Required]
+            int productId)
         {
             try
             {

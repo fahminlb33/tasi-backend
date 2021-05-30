@@ -16,7 +16,7 @@ namespace TASI.Backend.Domain.Users.Handlers
     {
         public int? UserId { get; set; }
     }
-    
+
     public class GetProfileCommandHandler : IRequestHandler<GetProfileCommand, IActionResult>
     {
         private readonly ILogger<GetProfileCommandHandler> _logger;
@@ -24,7 +24,8 @@ namespace TASI.Backend.Domain.Users.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public GetProfileCommandHandler(TasiContext context, IMapper mapper, ILogger<GetProfileCommandHandler> logger, IHttpContextAccessor httpContext)
+        public GetProfileCommandHandler(TasiContext context, IMapper mapper, ILogger<GetProfileCommandHandler> logger,
+            IHttpContextAccessor httpContext)
         {
             _context = context;
             _mapper = mapper;

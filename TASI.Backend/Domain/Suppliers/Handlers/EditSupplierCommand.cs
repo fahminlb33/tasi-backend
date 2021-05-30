@@ -23,14 +23,15 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
     }
 
     public class EditSupplierCommandHandler : IRequestHandler<EditSupplierCommand, IActionResult>
-    {    
+    {
         private readonly ILogger<EditSupplierCommandHandler> _logger;
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
         private readonly IBingMapsService _bingMaps;
         private readonly DefaultTasiConfig _config;
 
-        public EditSupplierCommandHandler(ILogger<EditSupplierCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
+        public EditSupplierCommandHandler(ILogger<EditSupplierCommandHandler> logger, TasiContext context,
+            IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
         {
             _logger = logger;
             _context = context;
@@ -50,7 +51,8 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             // make sure no duplicate name
             if (request.Body?.Name != null)
             {
-                if (await _context.Suppliers.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(), cancellationToken))
+                if (await _context.Suppliers.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(),
+                    cancellationToken))
                 {
                     return new ConflictObjectResult(new ErrorModel("Nama sudah digunakan pada supplier sebelumnya.",
                         ErrorCodes.DataDuplicated));
@@ -67,7 +69,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             {
                 var distance = await _bingMaps.CalculateDistance(request.Body.Latitude.Value,
                     request.Body.Longitude.Value, _config.CompanyLatitude, _config.CompanyLongitude, cancellationToken);
-                supplier.ShippingCost = _config.FlatShippingCost * (decimal)distance;
+                supplier.ShippingCost = _config.FlatShippingCost * (decimal) distance;
             }
 
             var updatedEntity = _mapper.Map(request.Body, supplier);

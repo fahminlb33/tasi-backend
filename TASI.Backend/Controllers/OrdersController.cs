@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Orders.Dto;
 using TASI.Backend.Domain.Orders.Handlers;
-using TASI.Backend.Domain.Users.Dtos;
-using TASI.Backend.Domain.Users.Entities;
-using TASI.Backend.Domain.Users.Handlers;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
@@ -29,7 +26,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost("supplier")]
-        public async Task<IActionResult> CreateSupplierOrder([FromBody] CreateSupplierOrderCommand model)
+        public async Task<IActionResult> CreateSupplierOrder([FromBody]
+            CreateSupplierOrderCommand model)
         {
             try
             {
@@ -43,7 +41,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost("sales")]
-        public async Task<IActionResult> CreateSalesOrder([FromBody] CreateSalesOrderCommand model)
+        public async Task<IActionResult> CreateSalesOrder([FromBody]
+            CreateSalesOrderCommand model)
         {
             try
             {
@@ -57,7 +56,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetOrdersCommand model)
+        public async Task<IActionResult> GetAll([FromQuery]
+            GetOrdersCommand model)
         {
             try
             {
@@ -71,7 +71,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("{orderId}")]
-        public async Task<IActionResult> Get([FromRoute] int orderId)
+        public async Task<IActionResult> Get([FromRoute]
+            int orderId)
         {
             try
             {
@@ -88,7 +89,9 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost("{orderId}/process")]
-        public async Task<IActionResult> Process([FromRoute, Required] int orderId, [FromBody] ProcessOrderDto body)
+        public async Task<IActionResult> Process([FromRoute] [Required]
+            int orderId, [FromBody]
+            ProcessOrderDto body)
         {
             try
             {

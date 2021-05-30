@@ -43,7 +43,7 @@ namespace TASI.Backend.Infrastructure.Registrations
                         },
                         OnForbidden = async context =>
                         {
-                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                             await context.Response.WriteAsJsonAsync(new ErrorModel(ErrorMessages.Forbidden,
                                 ErrorCodes.Forbidden));
                         }

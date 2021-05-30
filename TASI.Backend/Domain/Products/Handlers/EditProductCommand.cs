@@ -32,7 +32,7 @@ namespace TASI.Backend.Domain.Products.Handlers
 
         public async Task<IActionResult> Handle(EditProductCommand request, CancellationToken cancellationToken)
         {
-            var supplier = await _context.Products.FindAsync(new object[] { request.ProductId }, cancellationToken);
+            var supplier = await _context.Products.FindAsync(new object[] {request.ProductId}, cancellationToken);
             if (supplier == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
@@ -40,7 +40,8 @@ namespace TASI.Backend.Domain.Products.Handlers
 
             if (request.Body?.Name != null)
             {
-                if (await _context.Products.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(), cancellationToken))
+                if (await _context.Products.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(),
+                    cancellationToken))
                 {
                     return new ConflictObjectResult(new ErrorModel("Nama sudah digunakan pada produk sebelumnya.",
                         ErrorCodes.DataDuplicated));
@@ -49,7 +50,8 @@ namespace TASI.Backend.Domain.Products.Handlers
 
             if (request.Body?.Barcode != null)
             {
-                if (await _context.Products.AnyAsync(x => x.Barcode.ToLower() == request.Body.Barcode.ToLower(), cancellationToken))
+                if (await _context.Products.AnyAsync(x => x.Barcode.ToLower() == request.Body.Barcode.ToLower(),
+                    cancellationToken))
                 {
                     return new ConflictObjectResult(new ErrorModel("Barcode sudah digunakan pada produk sebelumnya.",
                         ErrorCodes.DataDuplicated));

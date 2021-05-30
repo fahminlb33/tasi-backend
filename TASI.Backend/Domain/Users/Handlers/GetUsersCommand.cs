@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -21,9 +20,9 @@ namespace TASI.Backend.Domain.Users.Handlers
         public int Page { get; set; }
         public int Limit { get; set; } = 10;
         public string? Query { get; set; }
-        public UserRole? Role { get;set; }
+        public UserRole? Role { get; set; }
     }
-    
+
     public class GetUsersCommandHandler : IRequestHandler<GetUsersCommand, IActionResult>
     {
         private readonly ILogger<CreateUserCommandHandler> _logger;
@@ -55,7 +54,8 @@ namespace TASI.Backend.Domain.Users.Handlers
             var totalRecords = await query.CountAsync(cancellationToken);
             var resultDto = _mapper.Map<IList<UserProfileDto>>(result);
 
-            _logger.LogInformation("Found users with query {0} and role {1}, result: {2} records", request.Query, request.Role, totalRecords);
+            _logger.LogInformation("Found users with query {0} and role {1}, result: {2} records", request.Query,
+                request.Role, totalRecords);
             return new JsonResult(new Pagination<UserProfileDto>(request.Page, result.Count, totalRecords, resultDto));
         }
     }

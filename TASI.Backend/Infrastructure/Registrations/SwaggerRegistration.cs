@@ -9,13 +9,14 @@ namespace TASI.Backend.Infrastructure.Registrations
 {
     public static class SwaggerRegistration
     {
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, string title, string version)
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services, string title,
+            string version)
         {
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc(version, new OpenApiInfo
                 {
-                    Title = title, 
+                    Title = title,
                     Version = version
                 });
 

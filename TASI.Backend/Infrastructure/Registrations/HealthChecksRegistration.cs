@@ -16,10 +16,8 @@ namespace TASI.Backend.Infrastructure.Registrations
                 .AddCheck("backend", () => HealthCheckResult.Healthy())
                 .AddDbContextCheck<TasiContext>("data-context");
 
-                services.AddHealthChecksUI(settings =>
-                {
-                    settings.AddHealthCheckEndpoint("main", "/health");
-                }).AddInMemoryStorage();
+            services.AddHealthChecksUI(settings => { settings.AddHealthCheckEndpoint("main", "/health"); })
+                .AddInMemoryStorage();
 
             return services;
         }

@@ -13,7 +13,7 @@ using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Domain.Orders.Handlers
 {
-    public class ProcessOrderCommand: IRequest<IActionResult>
+    public class ProcessOrderCommand : IRequest<IActionResult>
     {
         public int OrderId { get; set; }
         public ProcessOrderDto Body { get; set; }
@@ -25,7 +25,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public ProcessOrderCommandHandler(ILogger<ProcessOrderCommandHandler> logger, TasiContext context, IMapper mapper)
+        public ProcessOrderCommandHandler(ILogger<ProcessOrderCommandHandler> logger, TasiContext context,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;
@@ -56,10 +57,11 @@ namespace TASI.Backend.Domain.Orders.Handlers
                     request.Body.Code))
             };
         }
-        
+
         private static IActionResult GetInvalidSequentialProcessResponse()
         {
-            return new ConflictObjectResult(new ErrorModel("Tidak bisa menggunakan status ini karena status sebelumnya tidak valid",
+            return new ConflictObjectResult(new ErrorModel(
+                "Tidak bisa menggunakan status ini karena status sebelumnya tidak valid",
                 ErrorCodes.InvalidSequentialProcess));
         }
 
@@ -75,7 +77,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<IActionResult> TransitionToInProcess(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
+        private async Task<IActionResult> TransitionToInProcess(ProcessOrderCommand request, Order order,
+            CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
             if (latestStatus.Code != OrderStatusCode.Requested)
@@ -98,7 +101,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             {
                 foreach (var orderDetail in order.OrderDetails)
                 {
-                    var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId}, cancellationToken);
+                    var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId},
+                        cancellationToken);
                     product.Quantity -= orderDetail.Quantity;
 
                     _context.Products.Update(product);
@@ -110,7 +114,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             return new OkResult();
         }
 
-        private async Task<IActionResult> TransitionToDelivery(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
+        private async Task<IActionResult> TransitionToDelivery(ProcessOrderCommand request, Order order,
+            CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
             if (latestStatus.Code != OrderStatusCode.InProcess)
@@ -123,7 +128,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             return new OkResult();
         }
 
-        private async Task<IActionResult> TransitionToCompleted(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
+        private async Task<IActionResult> TransitionToCompleted(ProcessOrderCommand request, Order order,
+            CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
             if (latestStatus.Code != OrderStatusCode.Delivery)
@@ -149,7 +155,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             return new OkResult();
         }
 
-        private async Task<IActionResult> TransitionToCancelled(ProcessOrderCommand request, Order order, CancellationToken cancellationToken)
+        private async Task<IActionResult> TransitionToCancelled(ProcessOrderCommand request, Order order,
+            CancellationToken cancellationToken)
         {
             var latestStatus = order.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
             if (latestStatus.Code != OrderStatusCode.InProcess)
@@ -160,7 +167,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             // update stock
             foreach (var orderDetail in order.OrderDetails)
             {
-                var product = await _context.Products.FindAsync(new object[]{orderDetail.Product.ProductId}, cancellationToken);
+                var product =
+                    await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId}, cancellationToken);
                 product.Quantity = order.Type == OrderType.Sales
                     ? product.Quantity + orderDetail.Quantity
                     : product.Quantity - orderDetail.Quantity;

@@ -8,6 +8,7 @@ namespace TASI.Backend.Domain.Orders.Entities
     {
         [Key]
         public int OrderStatusHistoryId { get; set; }
+
         public OrderStatusCode Code { get; set; }
         public string Message { get; set; }
         public Order Order { get; set; }

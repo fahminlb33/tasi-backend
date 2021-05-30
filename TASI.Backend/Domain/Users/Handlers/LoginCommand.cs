@@ -27,7 +27,7 @@ namespace TASI.Backend.Domain.Users.Handlers
         [Required]
         public string Password { get; set; }
     }
-    
+
     public class LoginCommandHandler : IRequestHandler<LoginCommand, IActionResult>
     {
         private readonly ILogger<LoginCommandHandler> _logger;
@@ -35,7 +35,8 @@ namespace TASI.Backend.Domain.Users.Handlers
         private readonly IMapper _mapper;
         private readonly JwtConfig _config;
 
-        public LoginCommandHandler(TasiContext context, IMapper mapper, ILogger<LoginCommandHandler> logger, IOptions<JwtConfig> config)
+        public LoginCommandHandler(TasiContext context, IMapper mapper, ILogger<LoginCommandHandler> logger,
+            IOptions<JwtConfig> config)
         {
             _context = context;
             _mapper = mapper;
@@ -47,10 +48,12 @@ namespace TASI.Backend.Domain.Users.Handlers
         {
             _logger.LogInformation("User {0} login attempt", request.Username);
 
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == request.Username,
+                cancellationToken);
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
-                return new UnauthorizedObjectResult(new ErrorModel(ErrorMessages.Unauthorized, ErrorCodes.Unauthorized));
+                return new UnauthorizedObjectResult(new ErrorModel(ErrorMessages.Unauthorized,
+                    ErrorCodes.Unauthorized));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.EncryptionKey));

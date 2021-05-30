@@ -34,7 +34,8 @@ namespace TASI.Backend
             services.AddAutoMapper(typeof(UserDomainMapperProfile));
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            services.AddDbContext<TasiContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<TasiContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.Configure<JwtConfig>(Configuration.GetSection(nameof(JwtConfig)));

@@ -39,7 +39,8 @@ namespace TASI.Backend.Domain.Products.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public CreateProductCommandHandler(ILogger<CreateProductCommandHandler> logger, TasiContext context, IMapper mapper)
+        public CreateProductCommandHandler(ILogger<CreateProductCommandHandler> logger, TasiContext context,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;
@@ -49,7 +50,7 @@ namespace TASI.Backend.Domain.Products.Handlers
         public async Task<IActionResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             if (await _context.Products.AnyAsync(x =>
-                x.Name.ToLower() == request.Name.ToLower() || 
+                x.Name.ToLower() == request.Name.ToLower() ||
                 x.Barcode.ToLower() == request.Barcode.ToLower(), cancellationToken))
             {
                 return new ConflictObjectResult(new ErrorModel("Nama barang atau barcode sudah ada sebelumnya",

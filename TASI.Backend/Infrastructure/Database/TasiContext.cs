@@ -12,14 +12,14 @@ namespace TASI.Backend.Infrastructure.Database
         public TasiContext(DbContextOptions<TasiContext> options) : base(options)
         {
         }
-        
+
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             SetupGeneratedDates(modelBuilder.Entity<User>());
@@ -28,7 +28,7 @@ namespace TASI.Backend.Infrastructure.Database
             modelBuilder.Entity<Product>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
-                
+
             SetupGeneratedDates(modelBuilder.Entity<Supplier>());
             modelBuilder.Entity<Supplier>()
                 .HasIndex(x => x.Name)
@@ -47,7 +47,7 @@ namespace TASI.Backend.Infrastructure.Database
             modelBuilder.Entity<Order>()
                 .HasOne(x => x.PicUser)
                 .WithMany();
-            
+
             SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(x => x.Product);
@@ -61,10 +61,10 @@ namespace TASI.Backend.Infrastructure.Database
         {
             var sql = Database.IsSqlite()
                 ? "DATETIME('NOW')" // for SQLite
-                : "GETDATE()";      // for SQL Server
+                : "GETDATE()"; // for SQL Server
 
-            entity.Property(x => x.ModifiedDate)  
-                .HasDefaultValueSql(sql)  
+            entity.Property(x => x.ModifiedDate)
+                .HasDefaultValueSql(sql)
                 .ValueGeneratedOnAddOrUpdate();
         }
     }

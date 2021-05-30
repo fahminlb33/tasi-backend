@@ -10,6 +10,7 @@ namespace TASI.Backend.Domain.Products.Entities
     {
         [Key]
         public int ProductId { get; set; }
+
         public string Barcode { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }

@@ -25,7 +25,10 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("shippingCost")]
-        public async Task<IActionResult> CalculateShippingCost([FromQuery, Required] double latitude, [FromQuery, Required] double longitude)
+        public async Task<IActionResult> CalculateShippingCost([FromQuery] [Required]
+            double latitude,
+            [FromQuery] [Required]
+            double longitude)
         {
             try
             {
@@ -43,7 +46,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("lookup")]
-        public async Task<IActionResult> LookupAddress([FromQuery, Required] string address)
+        public async Task<IActionResult> LookupAddress([FromQuery] [Required]
+            string address)
         {
             try
             {

@@ -11,6 +11,7 @@ namespace TASI.Backend.Domain.Orders.Entities
     {
         [Key]
         public int OrderId { get; set; }
+
         public OrderType Type { get; set; }
         public double TotalWeight { get; set; }
         public decimal TotalSales { get; set; }
@@ -22,7 +23,7 @@ namespace TASI.Backend.Domain.Orders.Entities
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<OrderStatus> StatusHistory { get; set; }
-        
+
         public DateTime ModifiedDate { get; set; }
     }
 }

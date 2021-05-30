@@ -23,7 +23,8 @@ namespace TASI.Backend.Domain.Maps.Handlers
         private readonly IMapper _mapper;
         private readonly IBingMapsService _bing;
 
-        public LookupAddressCommandHandler(ILogger<LookupAddressCommandHandler> logger, IBingMapsService bing, IMapper mapper)
+        public LookupAddressCommandHandler(ILogger<LookupAddressCommandHandler> logger, IBingMapsService bing,
+            IMapper mapper)
         {
             _logger = logger;
             _bing = bing;
@@ -37,10 +38,12 @@ namespace TASI.Backend.Domain.Maps.Handlers
 
             if (!result.Success)
             {
-                return new NotFoundObjectResult(new ErrorModel("Lokasi tidak dapat ditemukan", ErrorCodes.NotFound, request.Address));
+                return new NotFoundObjectResult(new ErrorModel("Lokasi tidak dapat ditemukan", ErrorCodes.NotFound,
+                    request.Address));
             }
 
-            _logger.LogInformation("Geocoded location of {0} is {1},{2} at {3}", request.Address, result.Latitude, result.Longitude, result.GeocodedAddress);
+            _logger.LogInformation("Geocoded location of {0} is {1},{2} at {3}", request.Address, result.Latitude,
+                result.Longitude, result.GeocodedAddress);
             return new JsonResult(_mapper.Map<LookupAddressDto>(result));
         }
     }

@@ -34,7 +34,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private readonly TasiContext _context;
         private readonly DefaultTasiConfig _config;
 
-        public CreateSupplierOrderCommandHandler(ILogger<CreateSupplierOrderCommandHandler> logger, TasiContext context, IHttpContextAccessor httpContext, IOptions<DefaultTasiConfig> config, IMapper mapper)
+        public CreateSupplierOrderCommandHandler(ILogger<CreateSupplierOrderCommandHandler> logger, TasiContext context,
+            IHttpContextAccessor httpContext, IOptions<DefaultTasiConfig> config, IMapper mapper)
         {
             _logger = logger;
             _context = context;
@@ -49,7 +50,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             var supplier = await _context.Suppliers.FindAsync(request.SupplierId);
             var order = new Order
             {
-                Supplier =  supplier,
+                Supplier = supplier,
                 PicUser = user
             };
 

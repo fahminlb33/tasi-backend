@@ -12,7 +12,7 @@ namespace TASI.Backend.Domain.Users.Handlers
     {
         public int UserId { get; set; }
     }
-    
+
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, IActionResult>
     {
         private readonly ILogger<CreateUserCommandHandler> _logger;

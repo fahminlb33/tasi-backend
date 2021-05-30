@@ -16,7 +16,9 @@ namespace TASI.Backend.Infrastructure.Filters
 
             var httpMethodWithOptional = httpMethodAttributes?.FirstOrDefault(m => m.Template?.Contains("?") ?? false);
             if (httpMethodWithOptional == null)
+            {
                 return;
+            }
 
             var regex = $"{{(?<{captureName}>\\w+)\\?}}";
 
@@ -26,14 +28,16 @@ namespace TASI.Backend.Infrastructure.Filters
             {
                 var name = match.Groups[captureName].Value;
 
-                var parameter = operation.Parameters.FirstOrDefault(p => p.In == ParameterLocation.Path && p.Name == name);
+                var parameter =
+                    operation.Parameters.FirstOrDefault(p => p.In == ParameterLocation.Path && p.Name == name);
                 if (parameter == null)
                 {
                     continue;
                 }
 
                 parameter.AllowEmptyValue = true;
-                parameter.Description = "Must check \"Send empty value\" or Swagger passes a comma for empty values otherwise";
+                parameter.Description =
+                    "Must check \"Send empty value\" or Swagger passes a comma for empty values otherwise";
                 parameter.Required = false;
                 //parameter.Schema.Default = new OpenApiString(string.Empty);
                 parameter.Schema.Nullable = true;

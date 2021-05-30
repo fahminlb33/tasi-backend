@@ -8,7 +8,8 @@ namespace TASI.Backend.Infrastructure.Helpers
     {
         public static string ToQueryString(this IDictionary<string, string> dict)
         {
-            return dict.Aggregate("?", (s, pair) => $"{s}{HttpUtility.UrlEncode(pair.Key)}={HttpUtility.UrlEncode(pair.Value)}&")[..^1];
+            return dict.Aggregate("?",
+                (s, pair) => $"{s}{HttpUtility.UrlEncode(pair.Key)}={HttpUtility.UrlEncode(pair.Value)}&")[..^1];
         }
     }
 }

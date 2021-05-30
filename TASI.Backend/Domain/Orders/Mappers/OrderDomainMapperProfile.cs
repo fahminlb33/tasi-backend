@@ -9,7 +9,7 @@ namespace TASI.Backend.Domain.Orders.Mappers
         public OrderDomainMapperProfile()
         {
             CreateMap<OrderDetail, OrderDetailDto>();
-            
+
             CreateMap<OrderStatus, OrderStatusDto>();
 
             CreateMap<Order, OrderDto>();

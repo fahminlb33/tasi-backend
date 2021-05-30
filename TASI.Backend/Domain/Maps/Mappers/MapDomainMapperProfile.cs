@@ -9,7 +9,7 @@ namespace TASI.Backend.Domain.Maps.Mappers
         public MapDomainMapperProfile()
         {
             CreateMap<ReverseGeocodedAddress, LookupAddressDto>()
-                .ForMember(x => x.OriginalAddress, 
+                .ForMember(x => x.OriginalAddress,
                     options => options.MapFrom(p => p.Address));
         }
     }

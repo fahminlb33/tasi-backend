@@ -22,6 +22,7 @@ namespace TASI.Backend.Infrastructure.Resources
         public const string ModelValidation = "Request body/params/query contains invalid value";
         public const string UnhandledException = "An error has occurred when executing you request";
 
-        public static readonly ErrorModel InternalExceptionModel = new(UnhandledException, ErrorCodes.UnhandledException);
+        public static readonly ErrorModel InternalExceptionModel =
+            new(UnhandledException, ErrorCodes.UnhandledException);
     }
 }

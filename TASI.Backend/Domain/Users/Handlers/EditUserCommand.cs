@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -20,7 +19,7 @@ namespace TASI.Backend.Domain.Users.Handlers
     public class EditUserCommand : IRequest<IActionResult>
     {
         public int UserId { get; set; }
-        
+
         public EditUserDto? Body { get; set; }
     }
 
@@ -32,7 +31,8 @@ namespace TASI.Backend.Domain.Users.Handlers
         private readonly IBingMapsService _bingMaps;
         private readonly DefaultTasiConfig _config;
 
-        public EditUserCommandHandler(ILogger<EditUserCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
+        public EditUserCommandHandler(ILogger<EditUserCommandHandler> logger, TasiContext context, IMapper mapper,
+            IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
         {
             _logger = logger;
             _context = context;
@@ -52,17 +52,19 @@ namespace TASI.Backend.Domain.Users.Handlers
             // make sure no duplicate fullname
             if (request.Body?.FullName != null)
             {
-                if (await _context.Users.AnyAsync(x => x.FullName.ToLower() == request.Body.FullName.ToLower(), cancellationToken))
+                if (await _context.Users.AnyAsync(x => x.FullName.ToLower() == request.Body.FullName.ToLower(),
+                    cancellationToken))
                 {
                     return new ConflictObjectResult(new ErrorModel("Nama sudah digunakan oleh akun lain",
                         ErrorCodes.DataDuplicated));
                 }
             }
-            
+
             // make sure no duplicate username
             if (request.Body?.Username != null)
             {
-                if (await _context.Users.AnyAsync(x => x.FullName.ToLower() == request.Body.Username.ToLower(), cancellationToken))
+                if (await _context.Users.AnyAsync(x => x.FullName.ToLower() == request.Body.Username.ToLower(),
+                    cancellationToken))
                 {
                     return new ConflictObjectResult(new ErrorModel("Username sudah digunakan oleh akun lain",
                         ErrorCodes.DataDuplicated));
@@ -79,7 +81,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             {
                 var distance = await _bingMaps.CalculateDistance(request.Body.Latitude.Value,
                     request.Body.Longitude.Value, _config.CompanyLatitude, _config.CompanyLongitude, cancellationToken);
-                user.ShippingCost = _config.FlatShippingCost * (decimal)distance;
+                user.ShippingCost = _config.FlatShippingCost * (decimal) distance;
             }
 
             // project and save the entity

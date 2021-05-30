@@ -26,8 +26,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public int Limit { get; set; } = 10;
         public OrderType? Type { get; set; }
         public OrderStatusCode? Status { get; set; }
-        public DateTime? StartDate { get;set; }
-        public DateTime? EndDate { get;set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int? SupplierId { get; set; }
         public int? UserId { get; set; }
     }
@@ -39,7 +39,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public GetOrdersCommandHandler(ILogger<GetOrdersCommandHandler> logger, IHttpContextAccessor httpContext, TasiContext context, IMapper mapper)
+        public GetOrdersCommandHandler(ILogger<GetOrdersCommandHandler> logger, IHttpContextAccessor httpContext,
+            TasiContext context, IMapper mapper)
         {
             _logger = logger;
             _httpContext = httpContext;
@@ -119,5 +120,4 @@ namespace TASI.Backend.Domain.Orders.Handlers
             return new JsonResult(new Pagination<SimpleOrderDto>(request.Page, result.Count, totalRecords, resultDto));
         }
     }
-    
 }

@@ -9,6 +9,7 @@ namespace TASI.Backend.Domain.Orders.Entities
     {
         [Key]
         public int OrderDetailId { get; set; }
+
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
@@ -16,7 +17,7 @@ namespace TASI.Backend.Domain.Orders.Entities
         public QuantityUnit Unit { get; set; }
         public Product Product { get; set; }
         public Order Order { get; set; }
-        
+
         public DateTime ModifiedDate { get; set; }
     }
 }

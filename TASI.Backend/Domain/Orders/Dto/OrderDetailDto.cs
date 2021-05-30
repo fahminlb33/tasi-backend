@@ -16,7 +16,7 @@ namespace TASI.Backend.Domain.Orders.Dto
 
         [JsonConverter(typeof(StringEnumConverter))]
         public QuantityUnit Unit { get; set; }
-        
+
         public DateTime ModifiedDate { get; set; }
     }
 }

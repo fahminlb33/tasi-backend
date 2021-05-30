@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +28,8 @@ namespace TASI.Backend.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCommand model)
+        public async Task<IActionResult> Login([FromBody]
+            LoginCommand model)
         {
             try
             {
@@ -43,7 +43,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand model)
+        public async Task<IActionResult> ChangePassword([FromBody]
+            ChangePasswordCommand model)
         {
             try
             {
@@ -57,11 +58,12 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("profile/{userId?}")]
-        public async Task<IActionResult> GetProfile([FromRoute] int? userId)
+        public async Task<IActionResult> GetProfile([FromRoute]
+            int? userId)
         {
             try
             {
-                return await _mediator.Send(new GetProfileCommand { UserId = userId });
+                return await _mediator.Send(new GetProfileCommand {UserId = userId});
             }
             catch (Exception ex)
             {
@@ -71,7 +73,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetUsersCommand model)
+        public async Task<IActionResult> GetAll([FromQuery]
+            GetUsersCommand model)
         {
             try
             {
@@ -85,7 +88,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateUserCommand model)
+        public async Task<IActionResult> Create([FromBody]
+            CreateUserCommand model)
         {
             try
             {
@@ -100,7 +104,9 @@ namespace TASI.Backend.Controllers
 
         [HttpPut("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Edit([FromRoute, Required] int userId, [FromBody] EditUserDto body)
+        public async Task<IActionResult> Edit([FromRoute] [Required]
+            int userId, [FromBody]
+            EditUserDto body)
         {
             try
             {
@@ -119,11 +125,12 @@ namespace TASI.Backend.Controllers
 
         [HttpDelete("{userId}")]
         [Authorize(Roles = nameof(UserRole.SuperAdmin))]
-        public async Task<IActionResult> Delete([FromRoute, Required] int userId)
+        public async Task<IActionResult> Delete([FromRoute] [Required]
+            int userId)
         {
             try
             {
-                return await _mediator.Send(new DeleteUserCommand { UserId = userId });
+                return await _mediator.Send(new DeleteUserCommand {UserId = userId});
             }
             catch (Exception ex)
             {

@@ -25,7 +25,7 @@ namespace TASI.Backend.Domain.Users.Handlers
 
         [Required]
         [EnumDataType(typeof(UserRole))]
-        [NotEnumValue(typeof(UserRole), new object[] { UserRole.SuperAdmin })]
+        [NotEnumValue(typeof(UserRole), new object[] {UserRole.SuperAdmin})]
         public UserRole Role { get; set; }
 
         [Required]
@@ -55,7 +55,8 @@ namespace TASI.Backend.Domain.Users.Handlers
         private readonly IBingMapsService _bingMaps;
         private readonly DefaultTasiConfig _config;
 
-        public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
+        public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, TasiContext context, IMapper mapper,
+            IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
         {
             _logger = logger;
             _context = context;
@@ -77,7 +78,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             var user = _mapper.Map<User>(request);
             var distance = await _bingMaps.CalculateDistance(user.Latitude, user.Longitude, _config.CompanyLatitude,
                 _config.CompanyLongitude, cancellationToken);
-            user.ShippingCost = _config.FlatShippingCost * (decimal)distance;
+            user.ShippingCost = _config.FlatShippingCost * (decimal) distance;
 
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Suppliers.Dtos;
 using TASI.Backend.Domain.Suppliers.Handlers;
-using TASI.Backend.Domain.Users.Handlers;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
@@ -28,7 +26,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("{supplierId}")]
-        public async Task<IActionResult> Get([FromRoute, Required] int supplierId)
+        public async Task<IActionResult> Get([FromRoute] [Required]
+            int supplierId)
         {
             try
             {
@@ -45,7 +44,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetSuppliersCommand model)
+        public async Task<IActionResult> GetAll([FromQuery]
+            GetSuppliersCommand model)
         {
             try
             {
@@ -59,7 +59,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody, Required] CreateSupplierCommand model)
+        public async Task<IActionResult> Create([FromBody] [Required]
+            CreateSupplierCommand model)
         {
             try
             {
@@ -73,7 +74,9 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPut("{supplierId}")]
-        public async Task<IActionResult> Edit([FromRoute, Required] int supplierId, [FromBody] EditSupplierDto dto)
+        public async Task<IActionResult> Edit([FromRoute] [Required]
+            int supplierId, [FromBody]
+            EditSupplierDto dto)
         {
             try
             {
@@ -91,7 +94,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpDelete("{supplierId}")]
-        public async Task<IActionResult> Delete([FromRoute, Required] int supplierId)
+        public async Task<IActionResult> Delete([FromRoute] [Required]
+            int supplierId)
         {
             try
             {

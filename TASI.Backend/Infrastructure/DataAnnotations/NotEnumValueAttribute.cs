@@ -27,10 +27,9 @@ namespace TASI.Backend.Infrastructure.DataAnnotations
                 return ValidationResult.Success;
             }
 
-            return Values.Any(x => x.Equals(result)) 
-                ? new ValidationResult("The specified value is not valid") 
+            return Values.Any(x => x.Equals(result))
+                ? new ValidationResult("The specified value is not valid")
                 : ValidationResult.Success;
         }
-        
     }
 }

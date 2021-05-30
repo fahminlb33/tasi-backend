@@ -40,7 +40,8 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
         private readonly IBingMapsService _bingMaps;
         private readonly DefaultTasiConfig _config;
 
-        public CreateSupplierCommandHandler(ILogger<CreateSupplierCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
+        public CreateSupplierCommandHandler(ILogger<CreateSupplierCommandHandler> logger, TasiContext context,
+            IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
         {
             _logger = logger;
             _context = context;
@@ -52,16 +53,17 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
         public async Task<IActionResult> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
         {
             if (await _context.Suppliers.AnyAsync(x =>
-                x.Name.ToLower() == request.Name.ToLower() , cancellationToken))
+                x.Name.ToLower() == request.Name.ToLower(), cancellationToken))
             {
                 return new ConflictObjectResult(new ErrorModel("Nama supplier sudah ada sebelumnya",
                     ErrorCodes.ModelValidation));
             }
 
             var supplier = _mapper.Map<Supplier>(request);
-            var distance = await _bingMaps.CalculateDistance(supplier.Latitude, supplier.Longitude, _config.CompanyLatitude,
+            var distance = await _bingMaps.CalculateDistance(supplier.Latitude, supplier.Longitude,
+                _config.CompanyLatitude,
                 _config.CompanyLongitude, cancellationToken);
-            supplier.ShippingCost = _config.FlatShippingCost * (decimal)distance;
+            supplier.ShippingCost = _config.FlatShippingCost * (decimal) distance;
 
             await _context.Suppliers.AddAsync(supplier, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -69,7 +71,6 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             _logger.LogInformation("Created supplier {0} with ID {1}", supplier.Name, supplier.SupplierId);
             return new JsonResult(
                 await _context.Suppliers.FindAsync(new object[] {supplier.SupplierId}, cancellationToken));
-
         }
     }
 }
