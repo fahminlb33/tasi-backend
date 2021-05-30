@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -14,13 +15,18 @@ namespace TASI.Backend.Infrastructure.Services
 {
     public interface IBingMapsService
     {
-        Task<double> CalculateDistance(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude, CancellationToken cancellationToken);
+        Task<double> CalculateDistance(double sourceLatitude, double sourceLongitude, double destinationLatitude,
+            double destinationLongitude, CancellationToken cancellationToken);
+
         Task<ReverseGeocodeDto> ReverseGeocode(string address, CancellationToken cancellationToken);
+
+        bool IsPointDifferent(double latitude1, double longitude1, double latitude2, double longitude2,
+            double tolerance = 0.001);
     }
 
     public class BingMapsService : IBingMapsService
     {
-        private readonly CultureInfo USCulture = new CultureInfo("en-US");
+        private readonly CultureInfo USCulture = new("en-US");
 
         private readonly BingMapsConfig _config;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -70,8 +76,13 @@ namespace TASI.Backend.Infrastructure.Services
             }
 
             var coordinates = entry["point"]?["coordinates"]?.ToObject<double[]>();
+            Debug.Assert(coordinates != null, nameof(coordinates) + " != null");
             return new ReverseGeocodeDto(true, address, entry?["name"]?.Value<string>(), coordinates[0], coordinates[1]);
         }
 
+        public bool IsPointDifferent(double latitude1, double longitude1, double latitude2, double longitude2, double tolerance = 0.001)
+        {
+            return Math.Abs(latitude1 - latitude2) > tolerance || Math.Abs(longitude1 - longitude2) > tolerance;
+        }
     }
 }

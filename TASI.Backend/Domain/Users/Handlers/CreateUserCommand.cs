@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Users.Dtos;
 using TASI.Backend.Domain.Users.Entities;
+using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.DataAnnotations;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
+using TASI.Backend.Infrastructure.Services;
 
 namespace TASI.Backend.Domain.Users.Handlers
 {
@@ -32,6 +34,16 @@ namespace TASI.Backend.Domain.Users.Handlers
         [Required]
         [StringLength(50, MinimumLength = 5)]
         public string Password { get; set; }
+
+        [Required]
+        [StringLength(200, MinimumLength = 5)]
+        public string Address { get; set; }
+
+        [Required]
+        public long Latitude { get; set; }
+
+        [Required]
+        public long Longitude { get; set; }
     }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, IActionResult>
@@ -39,12 +51,16 @@ namespace TASI.Backend.Domain.Users.Handlers
         private readonly ILogger<CreateUserCommandHandler> _logger;
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
+        private readonly IBingMapsService _bingMaps;
+        private readonly DefaultTasiConfig _config;
 
-        public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, TasiContext context, IMapper mapper)
+        public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, DefaultTasiConfig config)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
+            _bingMaps = bingMaps;
+            _config = config;
         }
 
         public async Task<IActionResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -58,6 +74,10 @@ namespace TASI.Backend.Domain.Users.Handlers
             }
 
             var user = _mapper.Map<User>(request);
+            var distance = await _bingMaps.CalculateDistance(user.Latitude, user.Longitude, _config.CompanyLatitude,
+                _config.CompanyLongitude, cancellationToken);
+            user.ShippingCost = _config.FlatShippingCost * (decimal)distance;
+
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 

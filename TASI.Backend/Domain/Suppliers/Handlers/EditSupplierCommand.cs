@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Suppliers.Dtos;
+using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;
 using TASI.Backend.Infrastructure.Resources;
+using TASI.Backend.Infrastructure.Services;
 
 namespace TASI.Backend.Domain.Suppliers.Handlers
 {
@@ -24,12 +26,16 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
         private readonly ILogger<EditSupplierCommandHandler> _logger;
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
+        private readonly IBingMapsService _bingMaps;
+        private readonly DefaultTasiConfig _config;
 
-        public EditSupplierCommandHandler(ILogger<EditSupplierCommandHandler> logger, TasiContext context, IMapper mapper)
+        public EditSupplierCommandHandler(ILogger<EditSupplierCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, DefaultTasiConfig config)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
+            _bingMaps = bingMaps;
+            _config = config;
         }
 
         public async Task<IActionResult> Handle(EditSupplierCommand request, CancellationToken cancellationToken)
@@ -40,6 +46,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
             }
 
+            // make sure no duplicate name
             if (request.Body?.Name != null)
             {
                 if (await _context.Suppliers.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(), cancellationToken))
@@ -47,6 +54,19 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
                     return new ConflictObjectResult(new ErrorModel("Nama sudah digunakan pada supplier sebelumnya.",
                         ErrorCodes.DataDuplicated));
                 }
+            }
+
+            // calculate shipping cost
+            if (request.Body?.Latitude != null &&
+                request.Body?.Longitude != null &&
+                _bingMaps.IsPointDifferent(supplier.Latitude,
+                    supplier.Longitude,
+                    request.Body.Latitude.Value,
+                    request.Body.Longitude.Value))
+            {
+                var distance = await _bingMaps.CalculateDistance(request.Body.Latitude.Value,
+                    request.Body.Longitude.Value, _config.CompanyLatitude, _config.CompanyLongitude, cancellationToken);
+                supplier.ShippingCost = _config.FlatShippingCost * (decimal)distance;
             }
 
             var updatedEntity = _mapper.Map(request.Body, supplier);
