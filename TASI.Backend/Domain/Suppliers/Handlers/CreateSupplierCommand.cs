@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TASI.Backend.Domain.Suppliers.Entities;
 using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;
@@ -39,13 +40,13 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
         private readonly IBingMapsService _bingMaps;
         private readonly DefaultTasiConfig _config;
 
-        public CreateSupplierCommandHandler(ILogger<CreateSupplierCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, DefaultTasiConfig config)
+        public CreateSupplierCommandHandler(ILogger<CreateSupplierCommandHandler> logger, TasiContext context, IMapper mapper, IBingMapsService bingMaps, IOptions<DefaultTasiConfig> config)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
             _bingMaps = bingMaps;
-            _config = config;
+            _config = config.Value;
         }
 
         public async Task<IActionResult> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
