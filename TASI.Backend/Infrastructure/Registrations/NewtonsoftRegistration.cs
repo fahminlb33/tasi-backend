@@ -10,6 +10,7 @@ namespace TASI.Backend.Infrastructure.Registrations
             builder.AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
             return builder;
