@@ -1,12 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="appsettings.Development.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="5.0.1" />
@@ -46,10 +43,6 @@
   <ItemGroup>
     <Folder Include="Domain\Reports\Dto\" />
     <Folder Include="Domain\Reports\Handlers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="appsettings.Development.json" />
   </ItemGroup>
 
 </Project>
