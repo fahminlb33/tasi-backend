@@ -24,11 +24,10 @@ namespace TASI.Backend.Infrastructure.Database
         {
             SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
             modelBuilder.Entity<OrderDetail>()
-                .HasOne(x => x.Product)
-                .WithMany(x => x.OrderDetails);
+                .HasOne(x => x.Product);
             modelBuilder.Entity<OrderDetail>()
-                .HasOne(x => x.Order)
-                .WithMany(x => x.OrderDetails);
+                .HasOne(x => x.Order);
+                //.WithMany(x => x.OrderDetails);
 
             SetupGeneratedDates(modelBuilder.Entity<Order>());
             modelBuilder.Entity<Order>()
