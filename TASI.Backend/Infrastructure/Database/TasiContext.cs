@@ -29,6 +29,12 @@ namespace TASI.Backend.Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             SetupGeneratedDates(modelBuilder.Entity<User>());
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.FullName)
+                .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Username)
+                .IsUnique();
 
             SetupGeneratedDates(modelBuilder.Entity<Product>());
             modelBuilder.Entity<Product>()
@@ -54,13 +60,15 @@ namespace TASI.Backend.Infrastructure.Database
                 .HasOne(x => x.PicUser)
                 .WithMany();
 
+            SetupGeneratedDates(modelBuilder.Entity<OrderStatus>());
+            modelBuilder.Entity<OrderStatus>()
+                .HasOne(x => x.Order);
+
             SetupGeneratedDates(modelBuilder.Entity<OrderDetail>());
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(x => x.Product);
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(x => x.Order);
-
-            SetupGeneratedDates(modelBuilder.Entity<OrderStatus>());
 
             SetupGeneratedDates(modelBuilder.Entity<ManufactureJob>());
             modelBuilder.Entity<ManufactureJob>()
@@ -73,8 +81,15 @@ namespace TASI.Backend.Infrastructure.Database
                 .HasOne(x => x.Product)
                 .WithMany();
 
-            SetupGeneratedDates(modelBuilder.Entity<ManufactureMaterial>());
             SetupGeneratedDates(modelBuilder.Entity<ManufactureStatus>());
+            modelBuilder.Entity<ManufactureStatus>()
+                .HasOne(x => x.Order);
+
+            SetupGeneratedDates(modelBuilder.Entity<ManufactureMaterial>());
+            modelBuilder.Entity<ManufactureMaterial>()
+                .HasOne(x => x.Product);
+            modelBuilder.Entity<ManufactureMaterial>()
+                .HasOne(x => x.Order);
         }
 
         private void SetupGeneratedDates<T>(EntityTypeBuilder<T> entity) where T : class, IDaoEntity
