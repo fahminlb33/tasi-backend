@@ -91,7 +91,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Created manufacture job with ID {0}", job);
-            return new JsonResult(_mapper.Map<ManufactureJobDto>(job));
+            return new JsonResult(_mapper.Map<SimpleManufactureJobDto>(job));
         }
     }
 }

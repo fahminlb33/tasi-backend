@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TASI.Backend.Domain.Manufacture.Dtos;
 using TASI.Backend.Domain.Manufacture.Handlers;
+using TASI.Backend.Domain.Orders.Handlers;
 using TASI.Backend.Infrastructure.Resources;
 
 namespace TASI.Backend.Controllers
@@ -33,6 +34,37 @@ namespace TASI.Backend.Controllers
             try
             {
                 return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] GetManufactureJobsCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
+            }
+        }
+
+        [HttpGet("{manufactureId}")]
+        public async Task<IActionResult> Get([FromRoute] int manufactureId)
+        {
+            try
+            {
+                return await _mediator.Send(new GetManufactureJobCommand
+                {
+                    ManufactureId = manufactureId
+                });
             }
             catch (Exception ex)
             {

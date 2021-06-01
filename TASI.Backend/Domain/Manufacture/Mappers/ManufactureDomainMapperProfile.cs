@@ -9,7 +9,8 @@ namespace TASI.Backend.Domain.Manufacture.Mappers
     {
         public ManufactureDomainMapperProfile()
         {
-            CreateMap<ManufactureJob, ManufactureJobDto>()
+            CreateMap<ManufactureJob, ManufactureJobDto>();
+            CreateMap<ManufactureJob, SimpleManufactureJobDto>()
                 .ForMember(x => x.ProductId,
                     options => options.MapFrom(p => p.Product.ProductId))
                 .ForMember(x => x.LastStatus,
