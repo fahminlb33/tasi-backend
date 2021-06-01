@@ -4,6 +4,7 @@
     {
         Piece,
         Bottle,
-        Box
+        Box,
+        Gallon
     }
 }

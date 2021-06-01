@@ -31,6 +31,9 @@ namespace TASI.Backend.Domain.Products.Handlers
 
         [Required]
         public double Weight { get; set; }
+
+        [Required]
+        public bool CanManufacture { get; set; }
     }
 
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, IActionResult>

@@ -11,5 +11,6 @@ namespace TASI.Backend.Domain.Products.Dtos
         public QuantityUnit? Unit { get; set; }
         public decimal? Price { get; set; }
         public double? Weight { get; set; }
+        public bool? CanManufacture { get; set; }
     }
 }

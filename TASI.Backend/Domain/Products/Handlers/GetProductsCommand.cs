@@ -41,7 +41,7 @@ namespace TASI.Backend.Domain.Products.Handlers
 
                 if (int.TryParse(request.Query, out int queryInt))
                 {
-                    query = query.Where(x => x.Quantity == queryInt);
+                    query = query.Where(x => x.Stock == queryInt);
                 }
             }
 

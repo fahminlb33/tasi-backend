@@ -13,9 +13,10 @@ namespace TASI.Backend.Domain.Products.Entities
 
         public string Barcode { get; set; }
         public string Name { get; set; }
-        public int Quantity { get; set; }
+        public int Stock { get; set; }
         public decimal Price { get; set; }
         public double Weight { get; set; }
+        public bool CanManufacture { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public QuantityUnit Unit { get; set; }

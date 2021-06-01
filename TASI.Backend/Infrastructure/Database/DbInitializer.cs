@@ -76,15 +76,37 @@ namespace TASI.Backend.Infrastructure.Database
                     ShippingCost = 918153,
                 });
 
-            context.Products.Add(new Product
-            {
-                Barcode = "0011223344",
-                Name = "Air Prima Gelas",
-                Quantity = 10,
-                Unit = QuantityUnit.Piece,
-                Price = 1000,
-                Weight = 0.01
-            });
+            context.Products.AddRange(
+                new Product
+                {
+                    Barcode = "0011223344",
+                    Name = "Air Prima Gelas",
+                    Stock = 10,
+                    Unit = QuantityUnit.Piece,
+                    Price = 1000,
+                    Weight = 0.04,
+                    CanManufacture = true
+                },
+                new Product
+                {
+                    Barcode = "1122334455",
+                    Name = "Gelas Plastik",
+                    Stock = 10,
+                    Unit = QuantityUnit.Piece,
+                    Price = 1000,
+                    Weight = 0.01,
+                    CanManufacture = false
+                },
+                new Product
+                {
+                    Barcode = "1122334466",
+                    Name = "Air Minum",
+                    Stock = 10,
+                    Unit = QuantityUnit.Gallon,
+                    Price = 1000,
+                    Weight = 0.1,
+                    CanManufacture = false
+                });
 
             context.SaveChanges();
         }

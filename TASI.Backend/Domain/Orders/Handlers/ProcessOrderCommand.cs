@@ -87,10 +87,10 @@ namespace TASI.Backend.Domain.Orders.Handlers
             }
 
             // check stock
-            if (order.Type == OrderType.Sales && order.OrderDetails.Any(x => x.Product.Quantity - x.Quantity < 0))
+            if (order.Type == OrderType.Sales && order.OrderDetails.Any(x => x.Product.Stock - x.Quantity < 0))
             {
                 var insufficientProducts = order.OrderDetails
-                    .Where(x => x.Product.Quantity - x.Quantity < 0)
+                    .Where(x => x.Product.Stock - x.Quantity < 0)
                     .Select(x => $"Stok barang {x.Product.Name} ({x.Product.Barcode}) kurang/tidak tersedia");
                 return new ConflictObjectResult(new ErrorModel("Ada barang yang tidak tersedia di gudang",
                     ErrorCodes.NotEnoughStock, insufficientProducts));
@@ -103,7 +103,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 {
                     var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId},
                         cancellationToken);
-                    product.Quantity -= orderDetail.Quantity;
+                    product.Stock -= orderDetail.Quantity;
 
                     _context.Products.Update(product);
                 }
@@ -144,7 +144,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 {
                     var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId},
                         cancellationToken);
-                    product.Quantity += orderDetail.Quantity;
+                    product.Stock += orderDetail.Quantity;
 
                     _context.Products.Update(product);
                 }
@@ -169,9 +169,9 @@ namespace TASI.Backend.Domain.Orders.Handlers
             {
                 var product =
                     await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId}, cancellationToken);
-                product.Quantity = order.Type == OrderType.Sales
-                    ? product.Quantity + orderDetail.Quantity
-                    : product.Quantity - orderDetail.Quantity;
+                product.Stock = order.Type == OrderType.Sales
+                    ? product.Stock + orderDetail.Quantity
+                    : product.Stock - orderDetail.Quantity;
 
                 _context.Products.Update(product);
             }
