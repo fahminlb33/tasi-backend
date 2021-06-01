@@ -10,6 +10,7 @@ namespace TASI.Backend.Domain.Manufacture.Entities
     {
         [Key]
         public int ManufactureId { get; set; }
+
         public Product Product { get; set; }
         public int ExpectedProduce { get; set; }
         public DateTime ExpectedCompletion { get; set; }
@@ -17,7 +18,7 @@ namespace TASI.Backend.Domain.Manufacture.Entities
 
         public ICollection<ManufactureMaterial> Materials { get; set; }
         public ICollection<ManufactureStatus> StatusHistory { get; set; }
-        
+
         public DateTime ModifiedDate { get; set; }
     }
 }

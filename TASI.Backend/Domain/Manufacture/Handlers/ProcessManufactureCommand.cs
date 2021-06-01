@@ -25,7 +25,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public ProcessManufactureCommandHandler(ILogger<ProcessManufactureCommandHandler> logger, TasiContext context, IMapper mapper)
+        public ProcessManufactureCommandHandler(ILogger<ProcessManufactureCommandHandler> logger, TasiContext context,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;
@@ -62,7 +63,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
                 ErrorCodes.InvalidSequentialProcess));
         }
 
-        private async Task UpdateOrder(ProcessManufactureCommand request, ManufactureJob job, CancellationToken cancellationToken)
+        private async Task UpdateOrder(ProcessManufactureCommand request, ManufactureJob job,
+            CancellationToken cancellationToken)
         {
             // append status
             var status = _mapper.Map<ManufactureStatus>(request.Body);
@@ -78,7 +80,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             CancellationToken cancellationToken)
         {
             var latestStatus = job.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code !=   ManufactureStatusCode.Queued)
+            if (latestStatus.Code != ManufactureStatusCode.Queued)
             {
                 return GetInvalidSequentialProcessResponse();
             }
@@ -103,7 +105,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             CancellationToken cancellationToken)
         {
             var latestStatus = job.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code !=   ManufactureStatusCode.InProcess)
+            if (latestStatus.Code != ManufactureStatusCode.InProcess)
             {
                 return GetInvalidSequentialProcessResponse();
             }

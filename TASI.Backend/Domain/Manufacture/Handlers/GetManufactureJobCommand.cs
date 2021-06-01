@@ -13,7 +13,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
 {
     public class GetManufactureJobCommand : IRequest<IActionResult>
     {
-        public int ManufactureId { get;set; }
+        public int ManufactureId { get; set; }
     }
 
     public class GetManufactureCommandHandler : IRequestHandler<GetManufactureJobCommand, IActionResult>
@@ -22,7 +22,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public GetManufactureCommandHandler(ILogger<GetManufactureCommandHandler> logger, TasiContext context, IMapper mapper)
+        public GetManufactureCommandHandler(ILogger<GetManufactureCommandHandler> logger, TasiContext context,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;

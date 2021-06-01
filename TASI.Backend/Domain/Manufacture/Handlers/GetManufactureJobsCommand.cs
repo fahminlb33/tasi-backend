@@ -31,7 +31,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public GetManufactureJobsCommandHandler(ILogger<GetManufactureJobsCommandHandler> logger, TasiContext context, IMapper mapper)
+        public GetManufactureJobsCommandHandler(ILogger<GetManufactureJobsCommandHandler> logger, TasiContext context,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;
@@ -51,7 +52,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
                 var supplier = await _context.Products.FindAsync(request.ProductId);
                 if (supplier == null)
                 {
-                    return new NotFoundObjectResult(new ErrorModel("Produk manufaktur tidak ditemukan", ErrorCodes.NotFound));
+                    return new NotFoundObjectResult(new ErrorModel("Produk manufaktur tidak ditemukan",
+                        ErrorCodes.NotFound));
                 }
 
                 query = query.Where(x => x.Product.ProductId == request.ProductId);
@@ -81,7 +83,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             var resultDto = _mapper.Map<IList<SimpleManufactureJobDto>>(result);
 
             _logger.LogInformation("Found orders, result: {0} records", totalRecords);
-            return new JsonResult(new Pagination<SimpleManufactureJobDto>(request.Page, result.Count, totalRecords, resultDto));
+            return new JsonResult(
+                new Pagination<SimpleManufactureJobDto>(request.Page, result.Count, totalRecords, resultDto));
         }
     }
 }

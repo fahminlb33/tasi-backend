@@ -36,7 +36,8 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
         private readonly TasiContext _context;
         private readonly IMapper _mapper;
 
-        public CreateManufactureCommandHandler(ILogger<CreateManufactureCommandHandler> logger, TasiContext context, IMapper mapper)
+        public CreateManufactureCommandHandler(ILogger<CreateManufactureCommandHandler> logger, TasiContext context,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;
@@ -64,7 +65,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             };
 
             // get all the required materials
-            job.Materials =  await Task.WhenAll(request.Materials.Select(async x =>
+            job.Materials = await Task.WhenAll(request.Materials.Select(async x =>
             {
                 var material = await _context.Products.FindAsync(new object[] {x.ProductId}, cancellationToken);
                 return new ManufactureMaterial
@@ -76,7 +77,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             }));
 
             // create history
-            job.StatusHistory= new List<ManufactureStatus>
+            job.StatusHistory = new List<ManufactureStatus>
             {
                 new()
                 {

@@ -26,8 +26,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet("{supplierId}")]
-        public async Task<IActionResult> Get([FromRoute] [Required]
-            int supplierId)
+        public async Task<IActionResult> Get([FromRoute, Required] int supplierId)
         {
             try
             {
@@ -44,8 +43,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery]
-            GetSuppliersCommand model)
+        public async Task<IActionResult> GetAll([FromQuery] GetSuppliersCommand model)
         {
             try
             {
@@ -59,8 +57,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] [Required]
-            CreateSupplierCommand model)
+        public async Task<IActionResult> Create([FromBody, Required] CreateSupplierCommand model)
         {
             try
             {
@@ -74,9 +71,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPut("{supplierId}")]
-        public async Task<IActionResult> Edit([FromRoute] [Required]
-            int supplierId, [FromBody]
-            EditSupplierDto dto)
+        public async Task<IActionResult> Edit([FromRoute, Required] int supplierId, [FromBody] EditSupplierDto dto)
         {
             try
             {
@@ -94,8 +89,7 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpDelete("{supplierId}")]
-        public async Task<IActionResult> Delete([FromRoute] [Required]
-            int supplierId)
+        public async Task<IActionResult> Delete([FromRoute, Required] int supplierId)
         {
             try
             {

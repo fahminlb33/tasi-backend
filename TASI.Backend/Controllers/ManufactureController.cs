@@ -74,7 +74,8 @@ namespace TASI.Backend.Controllers
         }
 
         [HttpPost("{manufactureId}/process")]
-        public async Task<IActionResult> Process([FromRoute, Required] int manufactureId, [FromBody] ProcessManufactureDto model)
+        public async Task<IActionResult> Process([FromRoute, Required] int manufactureId,
+            [FromBody] ProcessManufactureDto model)
         {
             try
             {
