@@ -101,11 +101,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             {
                 foreach (var orderDetail in order.OrderDetails)
                 {
-                    var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId},
-                        cancellationToken);
-                    product.Stock -= orderDetail.Quantity;
-
-                    _context.Products.Update(product);
+                    orderDetail.Product.Stock -= orderDetail.Quantity;
                 }
             }
 
@@ -142,11 +138,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
             {
                 foreach (var orderDetail in order.OrderDetails)
                 {
-                    var product = await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId},
-                        cancellationToken);
-                    product.Stock += orderDetail.Quantity;
-
-                    _context.Products.Update(product);
+                    orderDetail.Product.Stock += orderDetail.Quantity;
                 }
             }
 
@@ -167,13 +159,10 @@ namespace TASI.Backend.Domain.Orders.Handlers
             // update stock
             foreach (var orderDetail in order.OrderDetails)
             {
-                var product =
-                    await _context.Products.FindAsync(new object[] {orderDetail.Product.ProductId}, cancellationToken);
+                var product = orderDetail.Product;
                 product.Stock = order.Type == OrderType.Sales
                     ? product.Stock + orderDetail.Quantity
                     : product.Stock - orderDetail.Quantity;
-
-                _context.Products.Update(product);
             }
 
             // update order
