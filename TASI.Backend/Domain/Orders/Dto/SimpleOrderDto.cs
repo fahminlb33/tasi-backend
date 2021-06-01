@@ -17,6 +17,7 @@ namespace TASI.Backend.Domain.Orders.Dto
         public decimal TotalShipping { get; set; }
         public decimal TotalTax { get; set; }
         public decimal SubTotal { get; set; }
+        public OrderStatusDto LastStatus { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
 }
