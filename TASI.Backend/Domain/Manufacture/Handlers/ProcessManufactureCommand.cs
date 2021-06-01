@@ -51,6 +51,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
                 ManufactureStatusCode.Queued => GetInvalidSequentialProcessResponse(),
                 ManufactureStatusCode.InProcess => await TransitionToInProcess(request, job, cancellationToken),
                 ManufactureStatusCode.Completed => await TransitionToCompleted(request, job, cancellationToken),
+                ManufactureStatusCode.Cancelled => await TransitionToCancelled(request, job, cancellationToken),
                 _ => new BadRequestObjectResult(new ErrorModel("Status tidak diketahui", ErrorCodes.ModelValidation,
                     request.Body.Code))
             };
@@ -118,6 +119,20 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
 
             // update stock
             job.Product.Stock += job.FinalProduce;
+
+            // update order
+            await UpdateOrder(request, job, cancellationToken);
+            return new OkResult();
+        }
+
+        private async Task<IActionResult> TransitionToCancelled(ProcessManufactureCommand request, ManufactureJob job,
+            CancellationToken cancellationToken)
+        {
+            var latestStatus = job.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
+            if (latestStatus.Code != ManufactureStatusCode.Queued || latestStatus.Code != ManufactureStatusCode.InProcess)
+            {
+                return GetInvalidSequentialProcessResponse();
+            }
 
             // update order
             await UpdateOrder(request, job, cancellationToken);

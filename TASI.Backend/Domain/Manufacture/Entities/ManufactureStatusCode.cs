@@ -4,6 +4,7 @@
     {
         Queued,
         InProcess,
-        Completed
+        Completed,
+        Cancelled
     }
 }
