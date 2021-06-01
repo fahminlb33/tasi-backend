@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TASI.Backend.Domain.Manufacture.Entities;
 using TASI.Backend.Domain.Orders.Entities;
 using TASI.Backend.Domain.Products.Entities;
 using TASI.Backend.Domain.Suppliers.Entities;
@@ -16,9 +17,14 @@ namespace TASI.Backend.Infrastructure.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
+
+        public DbSet<ManufactureJob> Manufacture { get; set; }
+        public DbSet<ManufactureMaterial> ManufactureMaterial { get; set; }
+        public DbSet<ManufactureStatus> ManufactureStatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,10 +42,10 @@ namespace TASI.Backend.Infrastructure.Database
 
             SetupGeneratedDates(modelBuilder.Entity<Order>());
             modelBuilder.Entity<Order>()
-                .HasMany(x => x.OrderDetails)
+                .HasMany(x => x.StatusHistory)
                 .WithOne(x => x.Order);
             modelBuilder.Entity<Order>()
-                .HasMany(x => x.StatusHistory)
+                .HasMany(x => x.OrderDetails)
                 .WithOne(x => x.Order);
             modelBuilder.Entity<Order>()
                 .HasOne(x => x.Supplier)
@@ -55,6 +61,20 @@ namespace TASI.Backend.Infrastructure.Database
                 .HasOne(x => x.Order);
 
             SetupGeneratedDates(modelBuilder.Entity<OrderStatus>());
+
+            SetupGeneratedDates(modelBuilder.Entity<ManufactureJob>());
+            modelBuilder.Entity<ManufactureJob>()
+                .HasMany(x => x.StatusHistory)
+                .WithOne(x => x.Order);
+            modelBuilder.Entity<ManufactureJob>()
+                .HasMany(x => x.Materials)
+                .WithOne(x => x.Order);
+            modelBuilder.Entity<ManufactureJob>()
+                .HasOne(x => x.Product)
+                .WithMany();
+
+            SetupGeneratedDates(modelBuilder.Entity<ManufactureMaterial>());
+            SetupGeneratedDates(modelBuilder.Entity<ManufactureStatus>());
         }
 
         private void SetupGeneratedDates<T>(EntityTypeBuilder<T> entity) where T : class, IDaoEntity
