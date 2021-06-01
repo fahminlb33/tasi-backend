@@ -9,7 +9,9 @@ namespace TASI.Backend.Domain.Orders.Mappers
     {
         public OrderDomainMapperProfile()
         {
-            CreateMap<OrderDetail, OrderDetailDto>();
+            CreateMap<OrderDetail, OrderDetailDto>()
+                .ForMember(x => x.ProductId,
+                    options => options.MapFrom(p => p.Product.ProductId));
 
             CreateMap<OrderStatus, OrderStatusDto>();
 
