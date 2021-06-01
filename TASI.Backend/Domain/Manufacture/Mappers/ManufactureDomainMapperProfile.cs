@@ -16,6 +16,7 @@ namespace TASI.Backend.Domain.Manufacture.Mappers
                 .ForMember(x => x.LastStatus,
                     options => options.MapFrom(p => p.StatusHistory.Last()));
 
+            CreateMap<ProcessManufactureDto, ManufactureStatus>();
             CreateMap<ManufactureStatusDto, ManufactureStatus>();
             CreateMap<ManufactureStatus, ManufactureStatusDto>();
 

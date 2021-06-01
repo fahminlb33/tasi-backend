@@ -36,6 +36,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
         public async Task<IActionResult> Handle(ProcessManufactureCommand request, CancellationToken cancellationToken)
         {
             var job = await _context.Manufacture
+                .Include(x => x.Product)
                 .Include(x => x.StatusHistory)
                 .Include(x => x.Materials)
                 .ThenInclude(x => x.Product)
@@ -97,6 +98,12 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
                     ErrorCodes.NotEnoughStock, outOfStockMaterials));
             }
 
+            // update stock
+            foreach (var material in job.Materials)
+            {
+                material.Product.Stock -= material.Quantity;
+            }
+
             // update order
             await UpdateOrder(request, job, cancellationToken);
             return new OkResult();
@@ -112,12 +119,14 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             }
 
             // check final produce
-            if (request.Body.FinalProduce != null)
+            if (request.Body.FinalProduce == null)
             {
-                job.FinalProduce = request.Body.FinalProduce.Value;
+                return new ConflictObjectResult(
+                    new ErrorModel("Hasil produksi harus diisi", ErrorCodes.ModelValidation));
             }
 
             // update stock
+            job.FinalProduce = request.Body.FinalProduce.Value;
             job.Product.Stock += job.FinalProduce;
 
             // update order
@@ -129,7 +138,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             CancellationToken cancellationToken)
         {
             var latestStatus = job.StatusHistory.OrderBy(x => x.ModifiedDate).Last();
-            if (latestStatus.Code != ManufactureStatusCode.Queued || latestStatus.Code != ManufactureStatusCode.InProcess)
+            if (latestStatus.Code != ManufactureStatusCode.Queued && latestStatus.Code != ManufactureStatusCode.InProcess)
             {
                 return GetInvalidSequentialProcessResponse();
             }

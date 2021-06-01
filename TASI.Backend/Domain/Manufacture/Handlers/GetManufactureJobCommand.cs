@@ -33,8 +33,10 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
         public async Task<IActionResult> Handle(GetManufactureJobCommand request, CancellationToken cancellationToken)
         {
             var order = await _context.Manufacture
+                .Include(x => x.Product)
                 .Include(x => x.StatusHistory)
                 .Include(x => x.Materials)
+                .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync(x => x.ManufactureId == request.ManufactureId, cancellationToken);
             if (order == null)
             {
