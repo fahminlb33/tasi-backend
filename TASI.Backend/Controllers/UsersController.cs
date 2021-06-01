@@ -41,6 +41,7 @@ namespace TASI.Backend.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterCommand model)
         {
