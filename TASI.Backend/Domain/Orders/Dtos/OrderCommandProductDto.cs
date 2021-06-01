@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TASI.Backend.Domain.Orders.Dto
+namespace TASI.Backend.Domain.Orders.Dtos
 {
     public class OrderCommandProductDto
     {

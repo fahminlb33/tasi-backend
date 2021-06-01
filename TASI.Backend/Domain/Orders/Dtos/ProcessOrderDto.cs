@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TASI.Backend.Domain.Orders.Entities;
 
-namespace TASI.Backend.Domain.Orders.Dto
+namespace TASI.Backend.Domain.Orders.Dtos
 {
     public class ProcessOrderDto
     {

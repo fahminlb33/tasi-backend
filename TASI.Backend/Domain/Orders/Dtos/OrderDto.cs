@@ -6,7 +6,7 @@ using TASI.Backend.Domain.Orders.Entities;
 using TASI.Backend.Domain.Suppliers.Entities;
 using TASI.Backend.Domain.Users.Dtos;
 
-namespace TASI.Backend.Domain.Orders.Dto
+namespace TASI.Backend.Domain.Orders.Dtos
 {
     public class OrderDto
     {

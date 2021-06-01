@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using TASI.Backend.Domain.Orders.Entities;
 
-namespace TASI.Backend.Domain.Orders.Dto
+namespace TASI.Backend.Domain.Orders.Dtos
 {
     public class OrderStatusDto
     {

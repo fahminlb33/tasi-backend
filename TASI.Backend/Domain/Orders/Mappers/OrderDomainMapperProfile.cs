@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
-using TASI.Backend.Domain.Orders.Dto;
+using TASI.Backend.Domain.Orders.Dtos;
 using TASI.Backend.Domain.Orders.Entities;
 
 namespace TASI.Backend.Domain.Orders.Mappers

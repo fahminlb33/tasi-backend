@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Reports\Dto\" />
+    <Folder Include="Domain\Reports\Dtos\" />
     <Folder Include="Domain\Reports\Handlers\" />
   </ItemGroup>
 

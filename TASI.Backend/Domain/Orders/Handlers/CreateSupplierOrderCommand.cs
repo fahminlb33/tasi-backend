@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TASI.Backend.Domain.Orders.Dto;
+using TASI.Backend.Domain.Orders.Dtos;
 using TASI.Backend.Domain.Orders.Entities;
 using TASI.Backend.Infrastructure.Configs;
 using TASI.Backend.Infrastructure.Database;

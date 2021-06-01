@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TASI.Backend.Domain.Orders.Dto;
+using TASI.Backend.Domain.Orders.Dtos;
 using TASI.Backend.Domain.Orders.Handlers;
 using TASI.Backend.Infrastructure.Resources;
 
