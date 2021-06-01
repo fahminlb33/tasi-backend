@@ -52,6 +52,8 @@ namespace TASI.Backend
             services.AddCustomSwagger("TASI Backend API", "v1");
             services.AddCustomHealthChecks();
 
+            services.AddHttpClient<IBingMapsService, BingMapsService>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IAuthorizationEvaluator, CustomAuthorizationEvaluator>();
             services.AddScoped<IBingMapsService, BingMapsService>();

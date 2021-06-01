@@ -29,11 +29,11 @@ namespace TASI.Backend.Infrastructure.Services
         private readonly CultureInfo USCulture = new("en-US");
 
         private readonly BingMapsConfig _config;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
 
-        public BingMapsService(IOptions<BingMapsConfig> bingConfig, IHttpClientFactory httpClientFactory)
+        public BingMapsService(IOptions<BingMapsConfig> bingConfig, HttpClient httpClient)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClient;
             _config = bingConfig.Value;
         }
 
@@ -53,8 +53,7 @@ namespace TASI.Backend.Infrastructure.Services
             };
 
             var url = "https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix" + queries.ToQueryString();
-            var client = _httpClientFactory.CreateClient();
-            var result = await client.GetAsync(url, cancellationToken);
+            var result = await _httpClient.GetAsync(url, cancellationToken);
             result.EnsureSuccessStatusCode();
             var tokenRoot = JToken.Parse(await result.Content.ReadAsStringAsync(cancellationToken));
             return tokenRoot["resourceSets"]?.First()["resources"]?.First()["results"]?.First()["travelDistance"]
@@ -70,8 +69,7 @@ namespace TASI.Backend.Infrastructure.Services
             };
 
             var url = "https://dev.virtualearth.net/REST/v1/Locations" + queries.ToQueryString();
-            var client = _httpClientFactory.CreateClient();
-            var result = await client.GetAsync(url, cancellationToken);
+            var result = await _httpClient.GetAsync(url, cancellationToken);
             result.EnsureSuccessStatusCode();
             var tokenRoot = JToken.Parse(await result.Content.ReadAsStringAsync(cancellationToken));
             var entry = tokenRoot["resourceSets"]?.First()["resources"]?.FirstOrDefault();
