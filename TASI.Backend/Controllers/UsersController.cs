@@ -41,6 +41,20 @@ namespace TASI.Backend.Controllers
             }
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterCommand model)
+        {
+            try
+            {
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in {0}", HttpContext.Request.Path);
+                return BadRequest(ErrorMessages.InternalExceptionModel);
+            }
+        }
+
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand model)
         {
