@@ -38,14 +38,14 @@ namespace TASI.Backend
 
             services.AddDbContext<TasiContext>(options =>
             {
-                if (_environment.IsDevelopment())
-                {
-                    options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"));
-                }
-                else
-                {
-                    options.UseSqlServer(Configuration.GetConnectionString("DevelopmentConnection"));
-                }
+                //if (_environment.IsDevelopment())
+                //{
+                options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"));
+                //}
+                //else
+                //{
+                //    options.UseSqlServer(Configuration.GetConnectionString("DevelopmentConnection"));
+                //}
             });
 
             if (_environment.IsDevelopment())
