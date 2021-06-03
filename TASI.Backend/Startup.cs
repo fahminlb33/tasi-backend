@@ -19,12 +19,14 @@ namespace TASI.Backend
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _environment;
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,8 +37,22 @@ namespace TASI.Backend
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddDbContext<TasiContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            {
+                if (_environment.IsDevelopment())
+                {
+                    options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"));
+                }
+                else
+                {
+                    var cosmosConfig = Configuration.GetSection("ConnectionStrings:ProductionConnection");
+                    options.UseCosmos(cosmosConfig["Endpoint"], cosmosConfig["Key"], cosmosConfig["DatabaseName"]);
+                }
+            });
+
+            if (_environment.IsDevelopment())
+            {
+                services.AddDatabaseDeveloperPageExceptionFilter();
+            }
 
             services.Configure<JwtConfig>(Configuration.GetSection(nameof(JwtConfig)));
             services.Configure<BingMapsConfig>(Configuration.GetSection(nameof(BingMapsConfig)));
