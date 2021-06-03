@@ -38,15 +38,15 @@ namespace TASI.Backend
 
             services.AddDbContext<TasiContext>(options =>
             {
-                if (_environment.IsDevelopment())
-                {
-                    options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"));
-                }
-                else
-                {
-                    var cosmosConfig = Configuration.GetSection("ConnectionStrings:ProductionConnection");
-                    options.UseCosmos(cosmosConfig["Endpoint"], cosmosConfig["Key"], cosmosConfig["DatabaseName"]);
-                }
+                //if (_environment.IsDevelopment())
+                //{
+                options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"));
+                //}
+                //else
+                //{
+                //    var cosmosConfig = Configuration.GetSection("ConnectionStrings:ProductionConnection");
+                //    options.UseCosmos(cosmosConfig["Endpoint"], cosmosConfig["Key"], cosmosConfig["DatabaseName"]);
+                //}
             });
 
             if (_environment.IsDevelopment())
