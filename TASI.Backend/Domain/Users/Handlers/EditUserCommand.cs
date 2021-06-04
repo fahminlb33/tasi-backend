@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -50,7 +51,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             }
 
             // make sure no duplicate fullname
-            if (request.Body?.FullName != null)
+            if (request.Body?.FullName != null && !string.Equals(user.FullName, request.Body.FullName, StringComparison.InvariantCultureIgnoreCase))
             {
                 if (await _context.Users.AnyAsync(x => x.FullName.ToLower() == request.Body.FullName.ToLower(),
                     cancellationToken))
@@ -61,7 +62,7 @@ namespace TASI.Backend.Domain.Users.Handlers
             }
 
             // make sure no duplicate username
-            if (request.Body?.Username != null)
+            if (request.Body?.Username != null && !string.Equals(user.Username, request.Body.Username, StringComparison.InvariantCultureIgnoreCase))
             {
                 if (await _context.Users.AnyAsync(x => x.FullName.ToLower() == request.Body.Username.ToLower(),
                     cancellationToken))

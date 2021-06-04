@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -32,14 +33,15 @@ namespace TASI.Backend.Domain.Products.Handlers
 
         public async Task<IActionResult> Handle(EditProductCommand request, CancellationToken cancellationToken)
         {
-            var supplier = await _context.Products.FindAsync(new object[] {request.ProductId}, cancellationToken);
-            if (supplier == null)
+            var product = await _context.Products.FindAsync(new object[] {request.ProductId}, cancellationToken);
+            if (product == null)
             {
                 return new NotFoundObjectResult(new ErrorModel(ErrorMessages.NotFound, ErrorCodes.NotFound));
             }
 
-            if (request.Body?.Name != null)
+            if (request.Body?.Name != null && !string.Equals(request.Body.Name, product.Name, StringComparison.InvariantCultureIgnoreCase))
             {
+
                 if (await _context.Products.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(),
                     cancellationToken))
                 {
@@ -48,7 +50,7 @@ namespace TASI.Backend.Domain.Products.Handlers
                 }
             }
 
-            if (request.Body?.Barcode != null)
+            if (request.Body?.Barcode != null && !string.Equals(request.Body.Name, product.Barcode, StringComparison.InvariantCultureIgnoreCase))
             {
                 if (await _context.Products.AnyAsync(x => x.Barcode.ToLower() == request.Body.Barcode.ToLower(),
                     cancellationToken))
@@ -58,12 +60,12 @@ namespace TASI.Backend.Domain.Products.Handlers
                 }
             }
 
-            var updatedEntity = _mapper.Map(request.Body, supplier);
+            var updatedEntity = _mapper.Map(request.Body, product);
             _context.Products.Update(updatedEntity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Updated product with ID {0}", supplier.ProductId);
-            return new JsonResult(supplier);
+            _logger.LogInformation("Updated product with ID {0}", product.ProductId);
+            return new JsonResult(product);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -49,7 +50,7 @@ namespace TASI.Backend.Domain.Suppliers.Handlers
             }
 
             // make sure no duplicate name
-            if (request.Body?.Name != null)
+            if (request.Body?.Name != null && !string.Equals(supplier.Name, request.Body.Name, StringComparison.InvariantCultureIgnoreCase))
             {
                 if (await _context.Suppliers.AnyAsync(x => x.Name.ToLower() == request.Body.Name.ToLower(),
                     cancellationToken))
