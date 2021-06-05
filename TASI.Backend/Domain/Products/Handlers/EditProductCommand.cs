@@ -50,7 +50,7 @@ namespace TASI.Backend.Domain.Products.Handlers
                 }
             }
 
-            if (request.Body?.Barcode != null && !string.Equals(request.Body.Name, product.Barcode, StringComparison.InvariantCultureIgnoreCase))
+            if (request.Body?.Barcode != null && !string.Equals(request.Body.Barcode, product.Barcode, StringComparison.InvariantCultureIgnoreCase))
             {
                 if (await _context.Products.AnyAsync(x => x.Barcode.ToLower() == request.Body.Barcode.ToLower(),
                     cancellationToken))
