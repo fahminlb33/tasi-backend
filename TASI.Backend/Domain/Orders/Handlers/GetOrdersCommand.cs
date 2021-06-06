@@ -53,6 +53,8 @@ namespace TASI.Backend.Domain.Orders.Handlers
             var skipCount = request.Page * request.Limit;
             var query = _context.Orders
                 .Include(x => x.StatusHistory)
+                .Include(x => x.PicUser)
+                .Include(x => x.Supplier)
                 .AsQueryable();
 
             var loggedUser = await _context.Users.FindAsync(_httpContext.GetUserIdFromClaim());
