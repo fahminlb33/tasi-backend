@@ -2,8 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using TASI.Backend.Domain.Orders.Entities;
-using TASI.Backend.Domain.Suppliers.Entities;
-using TASI.Backend.Domain.Users.Dtos;
 
 namespace TASI.Backend.Domain.Orders.Dtos
 {
@@ -19,9 +17,9 @@ namespace TASI.Backend.Domain.Orders.Dtos
         public decimal TotalShipping { get; set; }
         public decimal TotalTax { get; set; }
         public decimal SubTotal { get; set; }
+        public string UserFullname { get; set; }
+        public string SupplierName { get; set; }
         public OrderStatusDto LastStatus { get; set; }
-        public UserProfileDto PicUser { get; set; }
-        public Supplier Supplier { get; set; }
         public DateTime ModifiedDate { get; set; }
     }
 }

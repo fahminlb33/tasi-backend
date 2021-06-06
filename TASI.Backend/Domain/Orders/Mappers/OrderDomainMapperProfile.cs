@@ -17,6 +17,10 @@ namespace TASI.Backend.Domain.Orders.Mappers
 
             CreateMap<Order, OrderDto>();
             CreateMap<Order, SimpleOrderDto>()
+                .ForMember(x => x.SupplierName,
+                    options => options.MapFrom(p => p.Supplier.Name))
+                .ForMember(x => x.UserFullname,
+                    options => options.MapFrom(p => p.PicUser.FullName))
                 .ForMember(x => x.LastStatus,
                     options => options.MapFrom(p => p.StatusHistory.Last()));
 
