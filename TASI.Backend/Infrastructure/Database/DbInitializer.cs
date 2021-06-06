@@ -9,7 +9,7 @@ namespace TASI.Backend.Infrastructure.Database
     {
         public static void Initialize(TasiContext context)
         {
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             if (context.Users.Any())
