@@ -22,7 +22,10 @@ namespace TASI.Backend.Domain.Manufacture.Mappers
 
             CreateMap<ManufactureMaterial, ManufactureMaterialDto>()
                 .ForMember(x => x.ProductId,
-                    options => options.MapFrom(p => p.Product.ProductId));
+                    options => options.MapFrom(p => p.Product.ProductId))
+                .ForMember(x => x.ProductName,
+                    options => options.MapFrom(p => p.Product.Name));
+
         }
     }
 }
