@@ -32,8 +32,9 @@ namespace TASI.Backend.Domain.Orders.Handlers
         public async Task<IActionResult> Handle(GetOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _context.Orders
-                .Include(x => x.OrderDetails)
                 .Include(x => x.StatusHistory)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync(x => x.OrderId == request.OrderId, cancellationToken);
             if (order == null)
             {
