@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using TASI.Backend.Domain.Users.Entities;
 
@@ -16,5 +17,7 @@ namespace TASI.Backend.Domain.Users.Dtos
 
         [JsonConverter(typeof(StringEnumConverter))]
         public UserRole Role { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
     }
 }
