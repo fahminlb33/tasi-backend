@@ -44,6 +44,7 @@ namespace TASI.Backend.Domain.Manufacture.Handlers
             var skipCount = request.Page * request.Limit;
             var query = _context.Manufacture
                 .Include(x => x.StatusHistory)
+                .Include(x => x.Product)
                 .AsQueryable();
 
             // filter by product

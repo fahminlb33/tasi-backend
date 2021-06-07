@@ -13,6 +13,8 @@ namespace TASI.Backend.Domain.Manufacture.Mappers
             CreateMap<ManufactureJob, SimpleManufactureJobDto>()
                 .ForMember(x => x.ProductId,
                     options => options.MapFrom(p => p.Product.ProductId))
+                .ForMember(x => x.ProductName,
+                    options => options.MapFrom(p => p.Product.Name))
                 .ForMember(x => x.LastStatus,
                     options => options.MapFrom(p => p.StatusHistory.Last()));
 

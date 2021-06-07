@@ -6,6 +6,7 @@ namespace TASI.Backend.Domain.Manufacture.Dtos
     {
         public int ManufactureId { get; set; }
         public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public int ExpectedProduce { get; set; }
         public DateTime ExpectedCompletion { get; set; }
         public int FinalProduce { get; set; }
