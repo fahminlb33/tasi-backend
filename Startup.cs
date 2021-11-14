@@ -1,4 +1,8 @@
+using System;
 using System.Reflection;
+using Elastic.Apm.AspNetCore;
+using Elastic.Apm.DiagnosticSource;
+using Elastic.Apm.EntityFrameworkCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -31,23 +35,21 @@ namespace TASI.Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            foreach (var a in Configuration.AsEnumerable())
+            {
+                Console.WriteLine($"{a.Key}={a.Value}");
+            }
+
             services.AddOptions();
             services.AddMemoryCache();
             services.AddAutoMapper(typeof(UserDomainMapperProfile));
             services.AddMediatR(Assembly.GetExecutingAssembly());
-
+            
             services.AddDbContext<TasiContext>(options =>
             {
-                //if (_environment.IsDevelopment())
-                //{
-                options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"));
-                //}
-                //else
-                //{
-                //    options.UseSqlServer(Configuration.GetConnectionString("DevelopmentConnection"));
-                //}
+                options.UseSqlite(Configuration.GetConnectionString("MainConnection"));
             });
-
+            
             if (_environment.IsDevelopment())
             {
                 services.AddDatabaseDeveloperPageExceptionFilter();
@@ -86,11 +88,12 @@ namespace TASI.Backend
                 app.UseHsts();
             }
 
+            app.UseElasticApm(Configuration, new HttpDiagnosticsSubscriber(), new EfCoreDiagnosticsSubscriber());
             app.UseHttpsRedirection();
             app.UseCustomSerilog();
 
             app.UseCustomSwagger("TASI Backend API", "v1");
-            app.UseCustomHealthChecks();
+            //app.UseCustomHealthChecks();
             app.UseCustomResponseWrapper(env);
 
             app.UseRouting();
