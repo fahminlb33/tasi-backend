@@ -64,7 +64,7 @@ namespace TASI.Backend.Domain.Products.Handlers
             await _context.Products.AddAsync(product, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Created product {0} with ID", product.Name, product.ProductId);
+            _logger.LogInformation("Created product {0} with ID {1}", product.Name, product.ProductId);
             return new JsonResult(product);
         }
     }
