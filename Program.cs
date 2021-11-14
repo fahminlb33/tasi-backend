@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
 using Microsoft.AspNetCore.Hosting;
@@ -51,6 +52,9 @@ namespace TASI.Backend
                     AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
                     MinimumLogEventLevel = LogEventLevel.Debug,
                 })
+
+                // exclude APM
+                .Filter.ByExcluding(log => log.Properties.Any(p => p.Value.ToString().Contains("Elastic.Apm")))
 
                 // build final logger
                 .CreateLogger();
