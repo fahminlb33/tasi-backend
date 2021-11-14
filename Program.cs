@@ -32,6 +32,7 @@ namespace TASI.Backend
             var logger = new LoggerConfiguration()
                 // override log level
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Elastic.Apm", LogEventLevel.Information)
                 .MinimumLevel.Debug()
 
                 // enrich with extra information
@@ -52,9 +53,6 @@ namespace TASI.Backend
                     AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
                     MinimumLogEventLevel = LogEventLevel.Debug,
                 })
-
-                // exclude APM
-                .Filter.ByExcluding(log => log.Properties.Any(p => p.Value.ToString().Contains("Elastic.Apm")))
 
                 // build final logger
                 .CreateLogger();
