@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.ApplicationInsights.Sinks.ApplicationInsights.TelemetryConverters;
 using Serilog.Sinks.Elasticsearch;
 using TASI.Backend.Infrastructure.Database;
 
@@ -43,9 +41,7 @@ namespace TASI.Backend
 
                 // log sinks
                 .WriteTo.Console()
-                //.WriteTo.Seq(appSettings["Seq:ServerUrl"])
                 .WriteTo.File("logs/tasi-log-.txt", rollingInterval: RollingInterval.Day)
-                //.WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), new TraceTelemetryConverter())
                 .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(appSettings["ElasticSearch:NodeUris"]))
                 {
                     ModifyConnectionSettings = x => x.BasicAuthentication("elastic", "password"),
@@ -58,14 +54,14 @@ namespace TASI.Backend
 
                 // build final logger
                 .CreateLogger();
-            
+
             Log.Logger = logger;
 
             try
             {
                 logger.Information("Building web host");
                 var host = CreateHostBuilder(args).Build();
-              
+
                 logger.Information("Seeding database if not exists");
                 CreateDbIfNotExists(host);
 
@@ -90,6 +86,7 @@ namespace TASI.Backend
         {
             return Host.CreateDefaultBuilder(args)
                 .UseSerilog()
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     // application specific configuration
@@ -99,8 +96,7 @@ namespace TASI.Backend
                     }
 
                     config.AddJsonFile("appsettings.DockerCompose.json");
-                })
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                });
         }
 
         private static void CreateDbIfNotExists(IHost host)

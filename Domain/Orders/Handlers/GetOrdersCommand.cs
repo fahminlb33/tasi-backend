@@ -58,7 +58,7 @@ namespace TASI.Backend.Domain.Orders.Handlers
                 .AsQueryable();
 
             var loggedUser = await _context.Users.FindAsync(_httpContext.GetUserIdFromClaim());
-            if (loggedUser.Role == UserRole.Customer)
+            if (loggedUser?.Role == UserRole.Customer)
             {
                 // if user is logged in as customer, only show their orders
                 query = query.Where(x => x.PicUser.UserId == loggedUser.UserId);
