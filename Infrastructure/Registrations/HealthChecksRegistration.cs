@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Client;
+﻿//using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Routing;
@@ -16,8 +16,8 @@ namespace TASI.Backend.Infrastructure.Registrations
                 .AddCheck("backend", () => HealthCheckResult.Healthy())
                 .AddDbContextCheck<TasiContext>("data-context");
 
-            services.AddHealthChecksUI(settings => { settings.AddHealthCheckEndpoint("main", "/health"); })
-                .AddInMemoryStorage();
+            //services.AddHealthChecksUI(settings => { settings.AddHealthCheckEndpoint("main", "/health"); })
+            //    .AddSqliteStorage(connectionString);
 
             return services;
         }
@@ -27,13 +27,13 @@ namespace TASI.Backend.Infrastructure.Registrations
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
                 Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                //ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
-            app.UseHealthChecksUI(options =>
-            {
-                options.ApiPath = "/health-api";
-                options.UIPath = "/health-ui";
-            });
+            //app.UseHealthChecksUI(options =>
+            //{
+            //    options.ApiPath = "/health-api";
+            //    options.UIPath = "/health-ui";
+            //});
 
             return app;
         }
@@ -41,7 +41,7 @@ namespace TASI.Backend.Infrastructure.Registrations
         public static void MapCustomHealthChecks(this IEndpointRouteBuilder route)
         {
             route.MapHealthChecks("/health");
-            route.MapHealthChecksUI();
+            //route.MapHealthChecksUI();
         }
     }
 }
