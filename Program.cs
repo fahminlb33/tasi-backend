@@ -43,16 +43,16 @@ namespace TASI.Backend
 
                 // log sinks
                 .WriteTo.Console()
-                .WriteTo.File("logs/tasi-log-.txt", rollingInterval: RollingInterval.Day)
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(appSettings["ElasticSearch:NodeUris"]))
-                {
-                    ModifyConnectionSettings = x => x.BasicAuthentication("elastic", "password"),
-                    CustomFormatter = new EcsTextFormatter(),
-                    IndexFormat = "tasi-container-{0:yyyy.MM}",
-                    AutoRegisterTemplate = true,
-                    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
-                    MinimumLogEventLevel = LogEventLevel.Debug,
-                })
+                //.WriteTo.File("logs/tasi-log-.txt", rollingInterval: RollingInterval.Day)
+                //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(appSettings["ElasticSearch:NodeUris"]))
+                //{
+                //    ModifyConnectionSettings = x => x.BasicAuthentication("elastic", "password"),
+                //    CustomFormatter = new EcsTextFormatter(),
+                //    IndexFormat = "tasi-container-{0:yyyy.MM}",
+                //    AutoRegisterTemplate = true,
+                //    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
+                //    MinimumLogEventLevel = LogEventLevel.Debug,
+                //})
 
                 // build final logger
                 .CreateLogger();
